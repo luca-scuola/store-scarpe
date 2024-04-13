@@ -47,6 +47,7 @@ def admin_index():
     if 'user' in session and session['user'] == 'admin':
         db = get_db_connection()
         shoes = db.execute('SELECT * FROM shoes').fetchall()
+        reviews = {shoe['id']: db.execute('SELECT * FROM reviews WHERE shoe_id = ?', (shoe['id'],)).fetchall() for shoe in shoes}
         if request.method == 'POST':
             if 'add_shoe' in request.form:
                 name = request.form['name']
@@ -63,8 +64,9 @@ def admin_index():
                 db.execute('DELETE FROM reviews WHERE id = ?', (review_id,))
                 db.commit()
         db.close()
-        return render_template('admin_index.html', shoes=shoes)
+        return render_template('admin_index.html', shoes=shoes, reviews=reviews)
     return redirect(url_for('login'))
+
 
 @app.route('/user', methods=['GET', 'POST'])
 def user_index():
