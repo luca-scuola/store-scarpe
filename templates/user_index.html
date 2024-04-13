@@ -11,7 +11,7 @@
             margin-bottom: 10px;
         }
 
-        .hidden {
+        .details {
             display: none;
         }
     </style>
@@ -22,18 +22,25 @@
     {% for shoe in shoes %}
     <div class="shoe" onclick="toggleDetails(this)">
         <h3>{{ shoe['name'] }}</h3>
-        <div class="details hidden">
+        <div class="details">
             <p>{{ shoe['description'] }}</p>
             <ul>
                 {% for review in reviews[shoe['id']] %}
-                <li>{{ review['review_text'] }}</li>
+                <li>{{ review['review_text'] }} - Rated: {{ review['rating'] }} stars</li>
                 {% else %}
                 <li>No reviews yet</li>
                 {% endfor %}
             </ul>
-            <form action="/add_review" method="post">
+            <form onclick="event.stopPropagation()" action="/add_review" method="post">
                 <input type="hidden" name="shoe_id" value="{{ shoe['id'] }}">
-                <textarea name="review_text" required></textarea>
+                <textarea name="review_text" required placeholder="Leave a review"></textarea><br>
+                <div>
+                    {% for i in range(6) %}
+                    <input type="radio" id="star{{ i }}-{{ shoe['id'] }}" name="rating" value="{{ i }}" {% if i==0
+                        %}checked{% endif %}>
+                    <label for="star{{ i }}-{{ shoe['id'] }}">{{ i }}</label>
+                    {% endfor %}
+                </div>
                 <button type="submit">Add Review</button>
             </form>
         </div>
@@ -42,7 +49,7 @@
     <script>
         function toggleDetails(element) {
             var details = element.querySelector('.details');
-            details.classList.toggle('hidden');
+            details.style.display = details.style.display === 'none' ? 'block' : 'none';
         }
     </script>
     <a href="/logout">Logout</a>

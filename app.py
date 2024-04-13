@@ -27,9 +27,15 @@ def init_db():
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 shoe_id INTEGER NOT NULL,
                 review_text TEXT NOT NULL,
+                rating INTEGER DEFAULT 0,
                 FOREIGN KEY(shoe_id) REFERENCES shoes(id)
             )
         ''')
+        # Check if 'rating' column exists and add if it does not
+        try:
+            db.execute('SELECT rating FROM reviews LIMIT 1')
+        except sqlite3.OperationalError:
+            db.execute('ALTER TABLE reviews ADD COLUMN rating INTEGER DEFAULT 0')
         db.commit()
 
 @app.teardown_appcontext
@@ -101,9 +107,11 @@ def add_review():
     if 'user' in session and session['user'] == 'user':
         shoe_id = request.form['shoe_id']
         review_text = request.form['review_text']
-        if shoe_id and review_text:
+        rating = request.form['rating']
+        if shoe_id and review_text and rating.isdigit() and 0 <= int(rating) <= 5:
             db = get_db_connection()
-            db.execute('INSERT INTO reviews (shoe_id, review_text) VALUES (?, ?)', (shoe_id, review_text))
+            db.execute('INSERT INTO reviews (shoe_id, review_text, rating) VALUES (?, ?, ?)', 
+                       (shoe_id, review_text, int(rating)))
             db.commit()
             db.close()
         return redirect(url_for('user_index'))
