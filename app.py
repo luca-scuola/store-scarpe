@@ -12,32 +12,6 @@ def get_db_connection():
         db.row_factory = sqlite3.Row
     return db
 
-def init_db():
-    with app.app_context():
-        db = get_db_connection()
-        db.execute('''
-            CREATE TABLE IF NOT EXISTS shoes (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                description TEXT NOT NULL
-            )
-        ''')
-        db.execute('''
-            CREATE TABLE IF NOT EXISTS reviews (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                shoe_id INTEGER NOT NULL,
-                review_text TEXT NOT NULL,
-                rating INTEGER DEFAULT 0,
-                FOREIGN KEY(shoe_id) REFERENCES shoes(id)
-            )
-        ''')
-        # Check if 'rating' column exists and add if it does not
-        try:
-            db.execute('SELECT rating FROM reviews LIMIT 1')
-        except sqlite3.OperationalError:
-            db.execute('ALTER TABLE reviews ADD COLUMN rating INTEGER DEFAULT 0')
-        db.commit()
-
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
@@ -117,5 +91,4 @@ def add_review():
         return redirect(url_for('user_index'))
 
 if __name__ == '__main__':
-    init_db()
     app.run(debug=True)
