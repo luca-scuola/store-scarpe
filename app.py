@@ -20,8 +20,15 @@ def close_connection(exception):
         db.close()
 
 @app.route('/')
+def index():
+    return redirect(url_for('home'))
+
+@app.route('/home')
 def home():
-    return redirect(url_for('login'))
+    db = get_db_connection()
+    shoes = db.execute('SELECT * FROM shoes').fetchall()
+    db.close()
+    return render_template('home.html', shoes=shoes)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -63,7 +70,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('login'))
+    return redirect(url_for('home'))
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin_index():
