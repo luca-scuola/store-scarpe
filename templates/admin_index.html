@@ -12,21 +12,6 @@
     <div class="container mx-auto px-4">
         <h1 class="text-2xl font-semibold text-gray-800 py-4">Admin Dashboard</h1>
         <div class="my-5">
-            <h2 class="text-lg font-semibold text-gray-700">Add New Shoe</h2>
-            <form action="/admin" method="post" class="mt-4">
-                <input type="hidden" name="action" value="add_shoe">
-                <input
-                    class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text" placeholder="Shoe Name" name="name" required>
-                <textarea
-                    class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mt-2"
-                    placeholder="Description" name="description" required></textarea>
-                <button type="submit"
-                    class="mt-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Add
-                    Shoe</button>
-            </form>
-        </div>
-        <div class="my-5">
             <h2 class="text-lg font-semibold text-gray-700">Manage Shoes</h2>
             {% for shoe in shoes %}
             <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-4">
@@ -35,12 +20,13 @@
                         <h3 class="text-lg leading-6 font-medium text-gray-900">{{ shoe['name'] }}</h3>
                         <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ shoe['description'] }}</p>
                     </div>
-                    <form action="/admin" method="post">
-                        <input type="hidden" name="action" value="delete_shoe">
-                        <input type="hidden" name="shoe_id" value="{{ shoe['id'] }}">
-                        <button type="submit"
-                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded focus:outline-none focus:shadow-outline">Delete</button>
-                    </form>
+                    <div>
+                        <form action="/delete_shoe" method="post">
+                            <input type="hidden" name="shoe_id" value="{{ shoe['id'] }}">
+                            <button type="submit"
+                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded focus:outline-none focus:shadow-outline">Delete</button>
+                        </form>
+                    </div>
                 </div>
                 <div class="border-t border-gray-200">
                     {% for review in reviews[shoe['id']] %}
@@ -48,8 +34,7 @@
                         <dt class="text-sm font-medium text-gray-500">Review</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                             {{ review['review_text'] }} - Rated: {{ review['rating'] }} stars
-                            <form action="/admin" method="post" class="inline">
-                                <input type="hidden" name="action" value="delete_review">
+                            <form action="/delete_review" method="post" class="inline">
                                 <input type="hidden" name="review_id" value="{{ review['id'] }}">
                                 <button type="submit"
                                     class="ml-4 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded focus:outline-none focus:shadow-outline">Delete</button>

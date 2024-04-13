@@ -28,12 +28,13 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        db = get_db_connection()
         hash = generate_password_hash(password)
+        db = get_db_connection()
         try:
             db.execute('INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)', (username, hash, 'user'))
             db.commit()
         except sqlite3.IntegrityError:
+            db.close()
             return "Username already taken!"
         finally:
             db.close()
@@ -45,25 +46,19 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        print("Username inserito:", username)
-        print("Password inserita:", password)
         db = get_db_connection()
-        user = db.execute('SELECT users.username, users.password_hash, users.role, users.id FROM users WHERE username = ?', (username,)).fetchone()
-        print("Utente nel database:", user)
-        if user and check_password_hash(user[1], password):
-            session['user_id'] = user[3]
+        user = db.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+        db.close()
+        if user and check_password_hash(user['password_hash'], password):
+            session['user_id'] = user['id']
             session['user'] = user['username']
             session['role'] = user['role']
-            if user[2] == 'admin':
+            if user['role'] == 'admin':
                 return redirect(url_for('admin_index'))
             else:
                 return redirect(url_for('user_index'))
-        else:
-            print("Credenziali invalide")
-            return "Invalid username or password"
+        return "Invalid username or password"
     return render_template('login.html')
-
-
 
 @app.route('/logout')
 def logout():
@@ -75,13 +70,34 @@ def admin_index():
     if 'user' in session and session['role'] == 'admin':
         db = get_db_connection()
         shoes = db.execute('SELECT * FROM shoes').fetchall()
-        reviews = {}  # Aggiungi questa riga per inizializzare il dizionario delle recensioni
+        reviews = {}
         for shoe in shoes:
             reviews[shoe['id']] = db.execute('SELECT * FROM reviews WHERE shoe_id = ?', (shoe['id'],)).fetchall()
         db.close()
-        return render_template('admin_index.html', shoes=shoes, reviews=reviews)  # Passa anche le recensioni al template
+        return render_template('admin_index.html', shoes=shoes, reviews=reviews)
     return redirect(url_for('login'))
 
+@app.route('/delete_shoe', methods=['POST'])
+def delete_shoe():
+    if 'user' in session and session['role'] == 'admin':
+        shoe_id = request.form.get('shoe_id')
+        db = get_db_connection()
+        db.execute('DELETE FROM shoes WHERE id = ?', (shoe_id,))
+        db.commit()
+        db.close()
+        return redirect(url_for('admin_index'))
+    return redirect(url_for('login'))
+
+@app.route('/delete_review', methods=['POST'])
+def delete_review():
+    if 'user' in session and session['role'] == 'admin':
+        review_id = request.form.get('review_id')
+        db = get_db_connection()
+        db.execute('DELETE FROM reviews WHERE id = ?', (review_id,))
+        db.commit()
+        db.close()
+        return redirect(url_for('admin_index'))
+    return redirect(url_for('login'))
 
 @app.route('/user', methods=['GET', 'POST'])
 def user_index():
