@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+</head>
+
+<body>
+    <h1>Welcome, Administrator</h1>
+    <h2>All Shoes</h2>
+    <ul>
+        {% for shoe in shoes %}
+        <li>
+            {{ shoe.name }} - {{ shoe.description }}
+            <form action="/admin" method="post">
+                <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
+                <button type="submit" name="delete_shoe">Delete Shoe</button>
+            </form>
+            <ul>
+                {% for review in shoe.reviews %}
+                <li>{{ review.review_text }}
+                    <form action="/admin" method="post">
+                        <input type="hidden" name="review_id" value="{{ review.id }}">
+                        <button type="submit" name="delete_review">Delete Review</button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
+        {% endfor %}
+    </ul>
+    <h2>Add Shoe</h2>
+    <form action="/admin" method="post">
+        <input type="text" name="name" placeholder="Shoe Name" required>
+        <textarea name="description" placeholder="Description" required></textarea>
+        <button type="submit" name="add_shoe">Add Shoe</button>
+    </form>
+    <a href="/logout">Logout</a>
+</body>
+
+</html>

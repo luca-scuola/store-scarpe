@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Page</title>
+    <style>
+        .shoe {
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>User Page</h1>
+    {% for shoe in shoes %}
+    <div class="shoe" onclick="toggleDetails(this)">
+        <h3>{{ shoe['name'] }}</h3>
+        <div class="details hidden">
+            <p>{{ shoe['description'] }}</p>
+            <ul>
+                {% for review in reviews[shoe['id']] %}
+                <li>{{ review['review_text'] }}</li>
+                {% else %}
+                <li>No reviews yet</li>
+                {% endfor %}
+            </ul>
+            <form action="/add_review" method="post">
+                <input type="hidden" name="shoe_id" value="{{ shoe['id'] }}">
+                <textarea name="review_text" required></textarea>
+                <button type="submit">Add Review</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+    <script>
+        function toggleDetails(element) {
+            var details = element.querySelector('.details');
+            details.classList.toggle('hidden');
+        }
+    </script>
+    <a href="/logout">Logout</a>
+</body>
+
+</html>
