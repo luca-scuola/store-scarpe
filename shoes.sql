@@ -2,7 +2,8 @@
 CREATE TABLE IF NOT EXISTS shoes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    description TEXT NOT NULL
+    description TEXT NOT NULL,
+    image_url TEXT DEFAULT 'path/to/default/image.jpg'  -- Percorso predefinito dell'immagine se non specificato
 );
 
 -- Creazione della tabella per gli utenti

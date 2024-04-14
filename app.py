@@ -1,10 +1,18 @@
-from flask import Flask, request, render_template, redirect, url_for, session, g
+from flask import Flask, request, render_template, redirect, url_for, session, g, flash
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 import sqlite3
+import os
 
 app = Flask(__name__)
-app.secret_key = 'supersecretkey'  # Sostituisci questa stringa con una chiave segreta reale
+app.secret_key = 'supersecretkey'
+app.config['UPLOAD_FOLDER'] = 'static/images'
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
+
 DATABASE = 'shoes.db'
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 def get_db_connection():
     db = getattr(g, '_database', None)
@@ -49,7 +57,8 @@ def register():
             db.execute('INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)', (username, hash, 'user'))
             db.commit()
         except sqlite3.IntegrityError:
-            return "Username already taken!"
+            flash('Username already taken!')
+            return render_template('register.html')
         finally:
             db.close()
         return redirect(url_for('login'))
@@ -71,7 +80,7 @@ def login():
                 return redirect(url_for('admin_index'))
             else:
                 return redirect(url_for('user_index'))
-        return "Invalid username or password"
+        flash('Invalid username or password')
     return render_template('login.html')
 
 @app.route('/logout')
@@ -84,9 +93,8 @@ def admin_index():
     if 'user' in session and session['role'] == 'admin':
         db = get_db_connection()
         shoes = db.execute('SELECT * FROM shoes').fetchall()
-        reviews = {shoe['id']: db.execute('SELECT * FROM reviews WHERE shoe_id = ?', (shoe['id'],)).fetchall() for shoe in shoes}
         db.close()
-        return render_template('admin_index.html', shoes=shoes, reviews=reviews)
+        return render_template('admin_index.html', shoes=shoes)
     return redirect(url_for('login'))
 
 @app.route('/add_shoe', methods=['POST'])
@@ -94,12 +102,20 @@ def add_shoe():
     if 'user' in session and session['role'] == 'admin':
         name = request.form['name']
         description = request.form['description']
+        image = request.files.get('image') 
+        if image and allowed_file(image.filename):
+            filename = secure_filename(image.filename)
+            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            image_url = url_for('static', filename='images/' + filename)
+        else:
+            image_url = url_for('static', filename='images/default.jpg')
         db = get_db_connection()
-        db.execute('INSERT INTO shoes (name, description) VALUES (?, ?)', (name, description))
+        db.execute('INSERT INTO shoes (name, description, image_url) VALUES (?, ?, ?)', (name, description, image_url))
         db.commit()
         db.close()
         return redirect(url_for('admin_index'))
     return redirect(url_for('login'))
+
 
 @app.route('/delete_shoe', methods=['POST'])
 def delete_shoe():
@@ -112,25 +128,13 @@ def delete_shoe():
         return redirect(url_for('admin_index'))
     return redirect(url_for('login'))
 
-@app.route('/delete_review', methods=['POST'])
-def delete_review():
-    if 'user' in session and session['role'] == 'admin':
-        review_id = request.form.get('review_id')
-        db = get_db_connection()
-        db.execute('DELETE FROM reviews WHERE id = ?', (review_id,))
-        db.commit()
-        db.close()
-        return redirect(url_for('admin_index'))
-    return redirect(url_for('login'))
-
 @app.route('/user', methods=['GET', 'POST'])
 def user_index():
     if 'user' in session and session['role'] == 'user':
         db = get_db_connection()
         shoes = db.execute('SELECT * FROM shoes').fetchall()
-        reviews = db.execute('SELECT * FROM reviews WHERE user_id = ?', (session['user_id'],)).fetchall()
         db.close()
-        return render_template('user_index.html', shoes=shoes, reviews=reviews)
+        return render_template('user_index.html', shoes=shoes)
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
