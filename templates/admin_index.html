@@ -1,57 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
+{% block title %}Admin Dashboard{% endblock %}
 
-<body class="bg-gray-100">
-    <div class="container mx-auto px-4">
-        <h1 class="text-2xl font-semibold text-gray-800 py-4">Admin Dashboard</h1>
-        <div class="my-5">
-            <h2 class="text-lg font-semibold text-gray-700">Manage Shoes</h2>
-            {% for shoe in shoes %}
-            <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-4">
-                <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
-                    <div>
-                        <h3 class="text-lg leading-6 font-medium text-gray-900">{{ shoe['name'] }}</h3>
-                        <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ shoe['description'] }}</p>
-                    </div>
-                    <div>
-                        <form action="/delete_shoe" method="post">
-                            <input type="hidden" name="shoe_id" value="{{ shoe['id'] }}">
-                            <button type="submit"
-                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded focus:outline-none focus:shadow-outline">Delete</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="border-t border-gray-200">
-                    {% for review in reviews[shoe['id']] %}
-                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                        <dt class="text-sm font-medium text-gray-500">Review</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                            {{ review['review_text'] }} - Rated: {{ review['rating'] }} stars
-                            <form action="/delete_review" method="post" class="inline">
-                                <input type="hidden" name="review_id" value="{{ review['id'] }}">
-                                <button type="submit"
-                                    class="ml-4 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded focus:outline-none focus:shadow-outline">Delete</button>
-                            </form>
-                        </dd>
-                    </div>
-                    {% else %}
-                    <div class="bg-white px-4 py-5 sm:px-6">
-                        <p class="text-sm font-medium text-gray-500">No reviews yet</p>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endfor %}
+{% block content %}
+<div class="container mx-auto px-4 py-4">
+    <h1 class="text-3xl font-bold mb-4">Admin Dashboard</h1>
+    <h2 class="text-xl font-semibold">Manage Shoes</h2>
+    <div class="my-4">
+        <form action="{{ url_for('add_shoe') }}" method="post" class="mb-4">
+            <input type="text" name="name" placeholder="Shoe Name" required class="border rounded py-2 px-3 mr-2">
+            <textarea name="description" placeholder="Description" required
+                class="border rounded py-2 px-3 mr-2"></textarea>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add
+                Shoe</button>
+        </form>
+        {% for shoe in shoes %}
+        <div class="border p-4 rounded mb-2">
+            <p><strong>Name:</strong> {{ shoe.name }}</p>
+            <p><strong>Description:</strong> {{ shoe.description }}</p>
+            <form action="{{ url_for('delete_shoe') }}" method="post">
+                <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
+                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded">Delete
+                    Shoe</button>
+            </form>
         </div>
-        <a href="/logout" class="text-indigo-600 hover:text-indigo-900">Logout</a>
+        {% endfor %}
     </div>
-</body>
 
-</html>
+    <h2 class="text-xl font-semibold">Manage Reviews</h2>
+    <div class="my-4">
+        {% for review in reviews %}
+        <div class="border p-4 rounded mb-2">
+            <p><strong>Review:</strong> {{ review.review_text }}</p>
+            <p><strong>Rating:</strong> {{ review.rating }}/5</p>
+            <form action="{{ url_for('delete_review') }}" method="post">
+                <input type="hidden" name="review_id" value="{{ review.id }}">
+                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded">Delete
+                    Review</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

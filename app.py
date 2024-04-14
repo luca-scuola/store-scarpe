@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.secret_key = 'supersecretkey'  # Sostituisci questa stringa con una chiave segreta reale
 DATABASE = 'shoes.db'
 
 def get_db_connection():
@@ -30,6 +30,14 @@ def home():
     db.close()
     return render_template('home.html', shoes=shoes)
 
+@app.route('/search_shoes', methods=['GET'])
+def search_shoes():
+    query = request.args.get('query', '')
+    db = get_db_connection()
+    shoes = db.execute("SELECT * FROM shoes WHERE name LIKE ? OR description LIKE ?", ('%'+query+'%', '%'+query+'%')).fetchall()
+    db.close()
+    return render_template('home.html', shoes=shoes)
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -41,7 +49,6 @@ def register():
             db.execute('INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)', (username, hash, 'user'))
             db.commit()
         except sqlite3.IntegrityError:
-            db.close()
             return "Username already taken!"
         finally:
             db.close()
@@ -77,11 +84,21 @@ def admin_index():
     if 'user' in session and session['role'] == 'admin':
         db = get_db_connection()
         shoes = db.execute('SELECT * FROM shoes').fetchall()
-        reviews = {}
-        for shoe in shoes:
-            reviews[shoe['id']] = db.execute('SELECT * FROM reviews WHERE shoe_id = ?', (shoe['id'],)).fetchall()
+        reviews = {shoe['id']: db.execute('SELECT * FROM reviews WHERE shoe_id = ?', (shoe['id'],)).fetchall() for shoe in shoes}
         db.close()
         return render_template('admin_index.html', shoes=shoes, reviews=reviews)
+    return redirect(url_for('login'))
+
+@app.route('/add_shoe', methods=['POST'])
+def add_shoe():
+    if 'user' in session and session['role'] == 'admin':
+        name = request.form['name']
+        description = request.form['description']
+        db = get_db_connection()
+        db.execute('INSERT INTO shoes (name, description) VALUES (?, ?)', (name, description))
+        db.commit()
+        db.close()
+        return redirect(url_for('admin_index'))
     return redirect(url_for('login'))
 
 @app.route('/delete_shoe', methods=['POST'])
@@ -111,7 +128,7 @@ def user_index():
     if 'user' in session and session['role'] == 'user':
         db = get_db_connection()
         shoes = db.execute('SELECT * FROM shoes').fetchall()
-        reviews = db.execute('SELECT * FROM reviews').fetchall()
+        reviews = db.execute('SELECT * FROM reviews WHERE user_id = ?', (session['user_id'],)).fetchall()
         db.close()
         return render_template('user_index.html', shoes=shoes, reviews=reviews)
     return redirect(url_for('login'))
