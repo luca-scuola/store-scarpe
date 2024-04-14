@@ -20,26 +20,38 @@
                 <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ shoe.description }}</p>
             </div>
             <div class="border-t border-gray-200">
+                {% if 'user' in session %}
+                <form action="{{ url_for('add_review') }}" method="post" class="px-4 py-5">
+                    <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
+                    <textarea name="review_text" placeholder="Leave a review" required
+                        class="text-sm text-gray-900"></textarea>
+                    <input type="number" name="rating" min="1" max="5" required class="text-sm text-gray-900">
+                    <button type="submit"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded">Submit
+                        Review</button>
+                </form>
+                {% endif %}
                 <dl>
-                    {% for review in reviews %}
-                    {% if review.shoe_id == shoe.id %}
+                    {% if reviews.get(shoe.id) %}
+                    {% for review in reviews[shoe.id] %}
                     <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-500">Review</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ review.review_text }} -
-                            Rated: {{ review.rating }} stars</dd>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                            {{ review.review_text }} - Rated: {{ review.rating }} stars
+                        </dd>
                     </div>
-                    {% endif %}
+                    {% endfor %}
                     {% else %}
                     <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-500">Review</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">No reviews yet</dd>
                     </div>
-                    {% endfor %}
+                    {% endif %}
                 </dl>
             </div>
         </div>
         {% endfor %}
-        <a href="/logout" class="text-indigo-600 hover:text-indigo-900">Logout</a>
+        <a href="{{ url_for('logout') }}" class="text-indigo-600 hover:text-indigo-900">Logout</a>
     </div>
 </body>
 

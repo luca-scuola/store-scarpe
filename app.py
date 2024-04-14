@@ -117,6 +117,26 @@ def add_shoe():
     return redirect(url_for('login'))
 
 
+@app.route('/add_review', methods=['POST'])
+def add_review():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    user_id = session['user_id']
+    shoe_id = request.form['shoe_id']
+    review_text = request.form['review_text']
+    rating = request.form['rating']
+
+    db = get_db_connection()
+    db.execute('INSERT INTO reviews (shoe_id, user_id, review_text, rating) VALUES (?, ?, ?, ?)',
+               (shoe_id, user_id, review_text, rating))
+    db.commit()
+    db.close()
+
+    return redirect(url_for('user_index'))
+
+
+
 @app.route('/delete_shoe', methods=['POST'])
 def delete_shoe():
     if 'user' in session and session['role'] == 'admin':
@@ -133,9 +153,14 @@ def user_index():
     if 'user' in session and session['role'] == 'user':
         db = get_db_connection()
         shoes = db.execute('SELECT * FROM shoes').fetchall()
+        reviews = {}
+        for shoe in shoes:
+            shoe_reviews = db.execute('SELECT * FROM reviews WHERE shoe_id = ?', (shoe['id'],)).fetchall()
+            reviews[shoe['id']] = shoe_reviews
         db.close()
-        return render_template('user_index.html', shoes=shoes)
+        return render_template('user_index.html', shoes=shoes, reviews=reviews)
     return redirect(url_for('login'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)

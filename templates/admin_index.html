@@ -7,12 +7,11 @@
     <h1 class="text-3xl font-bold mb-4">Admin Dashboard</h1>
     <h2 class="text-xl font-semibold">Manage Shoes</h2>
     <div class="my-4">
-        <form action="{{ url_for('add_shoe') }}" method="post" class="mb-4">
-            <input type="text" name="name" placeholder="Shoe Name" required class="border rounded py-2 px-3 mr-2">
-            <textarea name="description" placeholder="Description" required
-                class="border rounded py-2 px-3 mr-2"></textarea>
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add
-                Shoe</button>
+        <form action="{{ url_for('add_shoe') }}" method="post" enctype="multipart/form-data" class="mb-4">
+            <input type="text" name="name" placeholder="Shoe Name" required>
+            <textarea name="description" placeholder="Description" required></textarea>
+            <input type="file" name="image" required>
+            <button type="submit">Add Shoe</button>
         </form>
         {% for shoe in shoes %}
         <div class="border p-4 rounded mb-2">
