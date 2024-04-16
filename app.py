@@ -170,5 +170,35 @@ def user_index():
         return render_template('user_index.html', shoes=shoes, reviews=reviews)
     return redirect(url_for('login'))
 
+@app.route('/edit_shoe/<int:shoe_id>', methods=['GET'])
+def edit_shoe(shoe_id):
+    db = get_db_connection()
+    shoe = db.execute('SELECT * FROM shoes WHERE id = ?', (shoe_id,)).fetchone()
+    db.close()
+    if shoe:
+        return render_template('edit_shoe.html', shoe=shoe)
+    return redirect(url_for('admin_index'))
+
+@app.route('/update_shoe/<int:shoe_id>', methods=['POST'])
+def update_shoe(shoe_id):
+    name = request.form['name']
+    description = request.form['description']
+    image = request.files.get('image')
+    
+    db = get_db_connection()
+    if image and allowed_file(image.filename):
+        filename = secure_filename(image.filename)
+        image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        db.execute('UPDATE shoes SET name = ?, description = ?, image_url = ? WHERE id = ?',
+                   (name, description, filename, shoe_id))
+    else:
+        db.execute('UPDATE shoes SET name = ?, description = ? WHERE id = ?',
+                   (name, description, shoe_id))
+    db.commit()
+    db.close()
+    
+    return redirect(url_for('admin_index'))
+
+
 if __name__ == '__main__':
     app.run(debug=True)
