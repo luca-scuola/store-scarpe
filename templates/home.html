@@ -4,61 +4,50 @@
 
 {% block content %}
 <style>
-    .slider {
-        overflow: hidden;
-        width: 100%;
-        position: relative;
-    }
-
-    .slides {
-        display: flex;
-
-        /* Per far andare le slide su più righe */
-        transition: transform 0.5s ease;
-        will-change: transform;
-    }
-
     .slide {
-        width: calc(100% / 3);
-        /* Utilizziamo il calcolo per ottenere il 33.33% dello spazio per ogni slide */
+        width: 300px;
+        margin-right: 20px;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        /* Allinea i titoli in cima */
-        background-color: white;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        margin: 0;
-        /* Rimosso il margine verticale per far adattare le slides correttamente */
+        justify-content: space-between;
+        height: 400px;
+    }
+
+    .slide:last-child {
+        margin-right: 0;
     }
 
     .slide h2 {
-        text-align: center;
-        /* Allinea il testo al centro */
-        margin-bottom: 10px;
-        /* Aggiunge un margine sotto il nome della scarpa */
+        margin-bottom: 0.5rem;
     }
 
-    img {
-        max-width: 100%;
-        height: auto;
-        margin-top: auto;
-        /* Allinea l'immagine in basso */
-        margin-bottom: 10px;
-        /* Aggiunge un margine sopra l'immagine */
+    .slide img {
+        max-height: 280px;
+        object-fit: cover;
+        object-position: bottom;
+    }
+
+    .hide-scroll-bar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .hide-scroll-bar::-webkit-scrollbar {
+        display: none;
     }
 </style>
 
 <div class="container mx-auto mt-8">
-    <h1 class="text-4xl font-bold mb-6">Welcome to Our Shoe Store</h1>
-    <div class="slider">
-        <div id="slides-container" class="slides">
+    <h1 class="text-4xl font-bold mb-6 text-center">Welcome to Our Shoe Store</h1>
+    <div class="flex overflow-x-scroll hide-scroll-bar pb-10">
+        <div id="slides-container" class="flex flex-nowrap">
             {% for shoe in shoes %}
-            <div class="slide p-6 rounded-lg shadow-lg">
-                <h2 class="text-2xl font-semibold">{{ shoe.name }}</h2>
-                <img src="{{ url_for('static', filename='images/' + shoe.image_url) }}" alt="{{ shoe.name }}"
-                    class="rounded-lg">
+            <div class="inline-block px-3">
+                <div class="slide rounded-lg shadow-lg bg-white p-6">
+                    <h2 class="text-2xl font-semibold">{{ shoe.name }}</h2>
+                    <img src="{{ url_for('static', filename='images/' + shoe.image_url) }}" alt="{{ shoe.name }}"
+                        class="rounded-lg">
+                </div>
             </div>
             {% endfor %}
         </div>
@@ -66,27 +55,40 @@
 </div>
 
 <script>
-    const slidesContainer = document.getElementById('slides-container');
-    let index = 0;
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const slidesContainer = document.getElementById('slides-container');
+        let currentIndex = 0;
+        let interval = null;
 
-    function cycleSlides() {
-        const slides = document.querySelectorAll('.slide');
-        const singleSlideWidth = slides[0].offsetWidth;
+        // Clona le slide originali e aggiungile alla fine del carosello
+        document.querySelectorAll('.slide').forEach(slide => {
+            const cloneSlide = slide.cloneNode(true);
+            slidesContainer.appendChild(cloneSlide);
+        });
 
-        if (index >= slides.length - 1) {
-            slidesContainer.style.transition = 'none';
-            slidesContainer.style.transform = 'translateX(0)';
-            index = 0;
-            setTimeout(() => {
-                slidesContainer.style.transition = 'transform 0.5s ease';
-            }, 20);
-        } else {
-            index++;
-            const offset = -index * singleSlideWidth;
-            slidesContainer.style.transform = `translateX(${offset}px)`;
+        function cycleSlides() {
+            if (currentIndex >= slidesContainer.children.length - 1) {
+                currentIndex = 0;
+                slidesContainer.style.transition = 'none';
+                slidesContainer.style.transform = 'translateX(0)';
+                // Utilizza setTimeout per applicare la transizione dopo il reset
+                setTimeout(() => {
+                    slidesContainer.style.transition = 'transform 0.3s ease-out';
+                    slidesContainer.style.transform = `translateX(-${currentIndex * (300 + 20)}px)`;
+                    currentIndex++;
+                }, 20);
+            } else {
+                slidesContainer.style.transition = 'transform 0.3s ease-out';
+                slidesContainer.style.transform = `translateX(-${currentIndex * (300 + 20)}px)`;
+                currentIndex++;
+            }
         }
-    }
 
-    setInterval(cycleSlides, 3000);
+        interval = setInterval(cycleSlides, 3000);
+
+        window.addEventListener('beforeunload', () => {
+            clearInterval(interval);
+        });
+    });
 </script>
 {% endblock %}
