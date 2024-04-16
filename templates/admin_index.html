@@ -7,10 +7,10 @@
     <h1 class="text-3xl font-bold mb-4">Admin Dashboard</h1>
     <h2 class="text-xl font-semibold">Manage Shoes</h2>
     <div class="my-4">
-        <form action="{{ url_for('add_shoe') }}" method="post" enctype="multipart/form-data" class="mb-4">
+        <form action="{{ url_for('add_shoe') }}" method="post" enctype="multipart/form-data">
             <input type="text" name="name" placeholder="Shoe Name" required>
             <textarea name="description" placeholder="Description" required></textarea>
-            <input type="file" name="image" required>
+            <input type="file" name="image" required> <!-- Campo per l'upload dell'immagine -->
             <button type="submit">Add Shoe</button>
         </form>
         {% for shoe in shoes %}

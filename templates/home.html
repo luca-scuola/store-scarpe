@@ -3,15 +3,68 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+<style>
+    .slider {
+        overflow: hidden;
+        width: 100%;
+        position: relative;
+    }
+
+    .slides {
+        display: flex;
+        transition: transform 0.5s ease;
+        /* Animazione di scorrimento */
+        will-change: transform;
+        /* Ottimizzazione per le animazioni */
+    }
+
+    .slide {
+        flex: 0 0 100%;
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.5s ease;
+        /* Assicuriamoci che anche gli slide abbiano una transizione */
+    }
+</style>
+
 <div class="container mx-auto mt-8">
     <h1 class="text-4xl font-bold mb-6">Welcome to Our Shoe Store</h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {% for shoe in shoes %}
-        <div class="bg-white p-6 rounded-lg shadow-lg">
-            <h2 class="text-2xl font-semibold mb-2">{{ shoe.name }}</h2>
-            <p>{{ shoe.description }}</p>
+    <div class="slider">
+        <div id="slides-container" class="slides">
+            {% for shoe in shoes %}
+            <div class="slide p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-semibold mb-2">{{ shoe.name }}</h2>
+                <img src="{{ url_for('static', filename='images/' + shoe.image_url) }}" alt="{{ shoe.name }}"
+                    class="rounded-lg">
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 </div>
-{% endblock %}
+
+<<script>
+    const slidesContainer = document.getElementById('slides-container');
+    let index = 0; // Inizia dalla prima slide
+
+    function cycleSlides() {
+    if (index >= slidesContainer.children.length - 1) {
+    // Se siamo all'ultima slide, resettiamo l'indice a zero
+    index = 0;
+    } else {
+    // Altrimenti, procediamo alla prossima slide
+    index++;
+    }
+
+    // Calcola la trasformazione necessaria per muovere il nastro delle immagini
+    const offset = -index * 100; // muovi ogni slide del 100% a sinistra
+    slidesContainer.style.transform = `translateX(${offset}%)`;
+    }
+
+    // Imposta l'intervallo per lo scorrimento delle slides
+    setInterval(cycleSlides, 3000);
+    </script>
+
+    {% endblock %}

@@ -34,7 +34,8 @@ def index():
 @app.route('/home')
 def home():
     db = get_db_connection()
-    shoes = db.execute('SELECT * FROM shoes').fetchall()
+    shoes_db = db.execute('SELECT * FROM shoes').fetchall()
+    shoes = [dict(shoe) for shoe in shoes_db]
     db.close()
     return render_template('home.html', shoes=shoes)
 
@@ -102,19 +103,28 @@ def add_shoe():
     if 'user' in session and session['role'] == 'admin':
         name = request.form['name']
         description = request.form['description']
-        image = request.files.get('image') 
+        image = request.files['image']
+
         if image and allowed_file(image.filename):
             filename = secure_filename(image.filename)
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            image_url = url_for('static', filename='images/' + filename)
+            image_url = filename  # il nome del file sarà sufficiente se è nella cartella 'static'
         else:
-            image_url = url_for('static', filename='images/default.jpg')
+            image_url = 'default.jpg'  # Assicurati che questo file esista nella cartella 'static/images'
+
         db = get_db_connection()
-        db.execute('INSERT INTO shoes (name, description, image_url) VALUES (?, ?, ?)', (name, description, image_url))
+        db.execute('INSERT INTO shoes (name, description, image_url) VALUES (?, ?, ?)', 
+                   (name, description, image_url))
         db.commit()
         db.close()
+        
+        flash('Scarpa aggiunta con successo.')
         return redirect(url_for('admin_index'))
-    return redirect(url_for('login'))
+    else:
+        flash('Devi essere amministratore per aggiungere scarpe.')
+        return redirect(url_for('login'))
+
+
 
 
 @app.route('/add_review', methods=['POST'])
@@ -134,7 +144,6 @@ def add_review():
     db.close()
 
     return redirect(url_for('user_index'))
-
 
 
 @app.route('/delete_shoe', methods=['POST'])
@@ -160,7 +169,6 @@ def user_index():
         db.close()
         return render_template('user_index.html', shoes=shoes, reviews=reviews)
     return redirect(url_for('login'))
-
 
 if __name__ == '__main__':
     app.run(debug=True)

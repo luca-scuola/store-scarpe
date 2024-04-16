@@ -15,7 +15,7 @@
         <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-4">
             <div class="px-4 py-5 sm:px-6">
                 <h3 class="text-lg leading-6 font-medium text-gray-900">{{ shoe.name }}</h3>
-                <img src="{{ url_for('static', filename='images/af1.png') }}" alt="Image of {{ shoe.name }}"
+                <img src="{{ shoe.image_url }}" alt="Image of {{ shoe.name }}"
                     style="max-width: 200px; max-height: 200px;">
                 <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ shoe.description }}</p>
             </div>
