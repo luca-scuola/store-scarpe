@@ -13,20 +13,25 @@
     .slides {
         display: flex;
         transition: transform 0.5s ease;
-        /* Animazione di scorrimento */
         will-change: transform;
-        /* Ottimizzazione per le animazioni */
     }
 
     .slide {
-        flex: 0 0 100%;
-        max-width: 100%;
+        width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        transition: transform 0.5s ease;
-        /* Assicuriamoci che anche gli slide abbiano una transizione */
+        background-color: white;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 0;
+        /* Rimosso il margine verticale per far adattare le slides correttamente */
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
     }
 </style>
 
@@ -45,26 +50,28 @@
     </div>
 </div>
 
-<<script>
+<script>
     const slidesContainer = document.getElementById('slides-container');
-    let index = 0; // Inizia dalla prima slide
+    let index = 0;
 
     function cycleSlides() {
-    if (index >= slidesContainer.children.length - 1) {
-    // Se siamo all'ultima slide, resettiamo l'indice a zero
-    index = 0;
-    } else {
-    // Altrimenti, procediamo alla prossima slide
-    index++;
+        const slides = document.querySelectorAll('.slide');
+        const singleSlideWidth = slides[0].offsetWidth;
+
+        if (index >= slides.length - 1) {
+            slidesContainer.style.transition = 'none';
+            slidesContainer.style.transform = 'translateX(0)';
+            index = 0;
+            setTimeout(() => {
+                slidesContainer.style.transition = 'transform 0.5s ease';
+            }, 20);
+        } else {
+            index++;
+            const offset = -index * singleSlideWidth;
+            slidesContainer.style.transform = `translateX(${offset}px)`;
+        }
     }
 
-    // Calcola la trasformazione necessaria per muovere il nastro delle immagini
-    const offset = -index * 100; // muovi ogni slide del 100% a sinistra
-    slidesContainer.style.transform = `translateX(${offset}%)`;
-    }
-
-    // Imposta l'intervallo per lo scorrimento delle slides
     setInterval(cycleSlides, 3000);
-    </script>
-
-    {% endblock %}
+</script>
+{% endblock %}
