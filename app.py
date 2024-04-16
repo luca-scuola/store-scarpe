@@ -103,18 +103,19 @@ def add_shoe():
     if 'user' in session and session['role'] == 'admin':
         name = request.form['name']
         description = request.form['description']
+        price = request.form['price']
         image = request.files['image']
 
         if image and allowed_file(image.filename):
             filename = secure_filename(image.filename)
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            image_url = filename  # il nome del file sarà sufficiente se è nella cartella 'static'
+            image_url = filename
         else:
-            image_url = 'default.jpg'  # Assicurati che questo file esista nella cartella 'static/images'
+            image_url = 'default.jpg'
 
         db = get_db_connection()
-        db.execute('INSERT INTO shoes (name, description, image_url) VALUES (?, ?, ?)', 
-                   (name, description, image_url))
+        db.execute('INSERT INTO shoes (name, description, price, image_url) VALUES (?, ?, ?, ?)', 
+                   (name, description, price, image_url))
         db.commit()
         db.close()
         
@@ -123,9 +124,6 @@ def add_shoe():
     else:
         flash('Devi essere amministratore per aggiungere scarpe.')
         return redirect(url_for('login'))
-
-
-
 
 @app.route('/add_review', methods=['POST'])
 def add_review():
@@ -144,7 +142,6 @@ def add_review():
     db.close()
 
     return redirect(url_for('user_index'))
-
 
 @app.route('/delete_shoe', methods=['POST'])
 def delete_shoe():
@@ -183,22 +180,22 @@ def edit_shoe(shoe_id):
 def update_shoe(shoe_id):
     name = request.form['name']
     description = request.form['description']
+    price = request.form['price']
     image = request.files.get('image')
     
     db = get_db_connection()
     if image and allowed_file(image.filename):
         filename = secure_filename(image.filename)
         image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        db.execute('UPDATE shoes SET name = ?, description = ?, image_url = ? WHERE id = ?',
-                   (name, description, filename, shoe_id))
+        db.execute('UPDATE shoes SET name = ?, description = ?, price = ?, image_url = ? WHERE id = ?',
+                   (name, description, price, filename, shoe_id))
     else:
-        db.execute('UPDATE shoes SET name = ?, description = ? WHERE id = ?',
-                   (name, description, shoe_id))
+        db.execute('UPDATE shoes SET name = ?, description = ?, price = ? WHERE id = ?',
+                   (name, description, price, shoe_id))
     db.commit()
     db.close()
     
     return redirect(url_for('admin_index'))
-
 
 if __name__ == '__main__':
     app.run(debug=True)

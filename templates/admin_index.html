@@ -1,50 +1,60 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block title %}Admin Dashboard{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
 
-{% block content %}
-<div class="container mx-auto px-4 py-4">
-    <h1 class="text-3xl font-bold mb-4">Admin Dashboard</h1>
-    <h2 class="text-xl font-semibold">Manage Shoes</h2>
-    <div class="my-4">
-        <form action="{{ url_for('add_shoe') }}" method="post" enctype="multipart/form-data">
-            <input type="text" name="name" placeholder="Shoe Name" required>
-            <textarea name="description" placeholder="Description" required></textarea>
-            <input type="file" name="image" required> <!-- Campo per l'upload dell'immagine -->
-            <button type="submit">Add Shoe</button>
-        </form>
-        {% for shoe in shoes %}
-        <div class="border p-4 rounded mb-2">
-            <p><strong>Name:</strong> {{ shoe.name }}</p>
-            <p><strong>Description:</strong> {{ shoe.description }}</p>
-            <img src="{{ url_for('static', filename='images/' + shoe.image_url) }}" alt="Shoe Image"
-                style="height: 100px;">
-            <form action="{{ url_for('delete_shoe') }}" method="post" style="display:inline;">
-                <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
-                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded">Delete
-                    Shoe</button>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-4">
+        <h1 class="text-3xl font-bold mb-4">Admin Dashboard</h1>
+        <h2 class="text-xl font-semibold">Manage Shoes</h2>
+        <div class="my-4">
+            <form action="{{ url_for('add_shoe') }}" method="post" enctype="multipart/form-data">
+                <input type="text" name="name" placeholder="Shoe Name" required>
+                <textarea name="description" placeholder="Description" required></textarea>
+                <input type="text" name="price" placeholder="Price" required> <!-- Aggiunto il campo per il prezzo -->
+                <input type="file" name="image" required>
+                <button type="submit">Add Shoe</button>
             </form>
-            <form action="{{ url_for('edit_shoe', shoe_id=shoe.id) }}" method="get" style="display:inline;">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded">Modify
-                    Shoe</button>
-            </form>
+            {% for shoe in shoes %}
+            <div class="border p-4 rounded mb-2">
+                <p><strong>Name:</strong> {{ shoe.name }}</p>
+                <p><strong>Description:</strong> {{ shoe.description }}</p>
+                <p><strong>Price:</strong> €{{ shoe.price }}</p> <!-- Aggiunto il prezzo -->
+                <img src="{{ url_for('static', filename='images/' + shoe.image_url) }}" alt="Shoe Image"
+                    style="height: 100px;">
+                <form action="{{ url_for('delete_shoe') }}" method="post" style="display:inline;">
+                    <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
+                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded">Delete
+                        Shoe</button>
+                </form>
+                <form action="{{ url_for('edit_shoe', shoe_id=shoe.id) }}" method="get" style="display:inline;">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded">Modify
+                        Shoe</button>
+                </form>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
 
-    <h2 class="text-xl font-semibold">Manage Reviews</h2>
-    <div class="my-4">
-        {% for review in reviews %}
-        <div class="border p-4 rounded mb-2">
-            <p><strong>Review:</strong> {{ review.review_text }}</p>
-            <p><strong>Rating:</strong> {{ review.rating }}/5</p>
-            <form action="{{ url_for('delete_review') }}" method="post">
-                <input type="hidden" name="review_id" value="{{ review.id }}">
-                <button type="submit" class="bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded">Delete
-                    Review</button>
-            </form>
+        <h2 class="text-xl font-semibold">Manage Reviews</h2>
+        <div class="my-4">
+            {% for review in reviews %}
+            <div class="border p-4 rounded mb-2">
+                <p><strong>Review:</strong> {{ review.review_text }}</p>
+                <p><strong>Rating:</strong> {{ review.rating }}/5</p>
+                <form action="{{ url_for('delete_review') }}" method="post">
+                    <input type="hidden" name="review_id" value="{{ review.id }}">
+                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded">Delete
+                        Review</button>
+                </form>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-</div>
-{% endblock %}
+</body>
+
+</html>

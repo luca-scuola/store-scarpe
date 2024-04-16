@@ -12,16 +12,20 @@
 
     .slides {
         display: flex;
+
+        /* Per far andare le slide su più righe */
         transition: transform 0.5s ease;
         will-change: transform;
     }
 
     .slide {
-        width: 100%;
+        width: calc(100% / 3);
+        /* Utilizziamo il calcolo per ottenere il 33.33% dello spazio per ogni slide */
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
+        /* Allinea i titoli in cima */
         background-color: white;
         padding: 20px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -29,9 +33,20 @@
         /* Rimosso il margine verticale per far adattare le slides correttamente */
     }
 
+    .slide h2 {
+        text-align: center;
+        /* Allinea il testo al centro */
+        margin-bottom: 10px;
+        /* Aggiunge un margine sotto il nome della scarpa */
+    }
+
     img {
         max-width: 100%;
         height: auto;
+        margin-top: auto;
+        /* Allinea l'immagine in basso */
+        margin-bottom: 10px;
+        /* Aggiunge un margine sopra l'immagine */
     }
 </style>
 
@@ -41,7 +56,7 @@
         <div id="slides-container" class="slides">
             {% for shoe in shoes %}
             <div class="slide p-6 rounded-lg shadow-lg">
-                <h2 class="text-2xl font-semibold mb-2">{{ shoe.name }}</h2>
+                <h2 class="text-2xl font-semibold">{{ shoe.name }}</h2>
                 <img src="{{ url_for('static', filename='images/' + shoe.image_url) }}" alt="{{ shoe.name }}"
                     class="rounded-lg">
             </div>
