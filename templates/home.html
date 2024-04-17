@@ -1,4 +1,4 @@
-{% extends 'base_without_search.html' %}
+{% extends 'base.html' %}
 
 {% block title %}Home{% endblock %}
 
@@ -17,6 +17,10 @@
         color: #333;
         /* Grigio scuro per il testo */
         transition: transform 0.3s ease-in-out;
+        border: 1px solid #ffa500;
+        /* Bordo arancione */
+        border-radius: 8px;
+        /* Bordi arrotondati */
     }
 
     #slides-container {
@@ -50,7 +54,7 @@
 
     /* Aumentare il margine inferiore del contenitore delle slide */
     .overflow-hidden {
-        margin-bottom: 100px;
+        margin-bottom: 50px;
         /* Spazio aggiunto tra le slide e le features */
     }
 
@@ -105,8 +109,8 @@
     }
 </style>
 
-<div class="container mx-auto mt-8 overflow-hidden">
-    <h1 class="text-4xl font-bold mb-6 text-center text-black-800">Welcome to Our Shoe Store</h1>
+<div class="container mx-auto mt-20 overflow-hidden">
+    <h1 class="text-4xl font-bold mb-20 text-center text-black-800">Welcome to Our Shoe Store</h1>
     <div class="flex overflow-x-scroll hide-scroll-bar pb-10">
         <div id="slides-container" class="flex flex-nowrap">
             {% for shoe in shoes %}

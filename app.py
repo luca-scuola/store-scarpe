@@ -198,5 +198,16 @@ def update_shoe(shoe_id):
     
     return redirect(url_for('admin_index'))
 
+@app.route('/shoe/<int:shoe_id>')
+def shoe_details(shoe_id):
+    db = get_db_connection()
+    shoe = db.execute('SELECT * FROM shoes WHERE id = ?', (shoe_id,)).fetchone()
+    db.close()
+    if shoe:
+        return render_template('shoe_details.html', shoe=shoe)
+    else:
+        return 'Scarpa non trovata', 404
+
+
 if __name__ == '__main__':
     app.run(debug=True)
