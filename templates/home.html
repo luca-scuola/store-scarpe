@@ -7,23 +7,18 @@
     .slide {
         width: 300px;
         margin-right: 20px;
-        /* Margin between slides */
         display: inline-flex;
-        /* Use inline-flex for better control */
         flex-direction: column;
         justify-content: space-between;
         height: 400px;
     }
 
-    /* Style adjustments for the container to ensure consistent margins */
     #slides-container {
         margin-right: -20px;
-        /* Negative margin to counteract last slide margin */
     }
 
     .slide:last-child {
         margin-right: 0;
-        /* Ensures the last slide doesn't have extra space on the right */
     }
 
     .slide h2 {
@@ -44,6 +39,59 @@
     .hide-scroll-bar::-webkit-scrollbar {
         display: none;
     }
+
+    /* Aumentato lo spazio tra la sezione delle slide e delle features */
+    .container.mx-auto.mt-8.overflow-hidden {
+        margin-bottom: 4rem;
+        /* o la quantità di spazio che preferisci */
+    }
+
+    .feature-section {
+        background-color: #f9f9f9;
+        border-top: 1px solid #eaeaea;
+        border-bottom: 1px solid #eaeaea;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+    .feature-item {
+        padding: 20px;
+        background-color: #ffffff;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .feature-item img {
+        margin-bottom: 16px;
+    }
+
+    .feature-item h3 {
+        color: #333;
+        font-size: 1.25rem;
+        margin-bottom: 8px;
+    }
+
+    .feature-item p {
+        color: #666;
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    .text-brand-color {
+        color: #5e9ca0;
+    }
+
+    .hover\:underline:hover {
+        text-decoration: underline;
+    }
+
+    @media (min-width: 640px) {
+        .grid-cols-3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.5rem;
+        }
+    }
 </style>
 
 <div class="container mx-auto mt-8 overflow-hidden">
@@ -63,41 +111,100 @@
     </div>
 </div>
 
+<!-- Qui potrebbe essere necessario aggiungere ulteriore spazio se quello sopra non è sufficiente -->
+<div style="height: 150px;"> <!-- Regola questo valore come necessario -->
+    <!-- Questo div è solo per spazio extra, nessun altro contenuto qui -->
+</div>
+
+<!-- Feature section starts here -->
+<div class="feature-section">
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-3 gap-8 text-center">
+            <!-- Feature 1 -->
+            <div class="feature-item flex flex-col items-center">
+                <img src="{{ url_for('static', filename='icon/search.png') }}" alt="Verification Icon" class="mx-auto">
+                <h3 class="font-semibold mt-4">Verification</h3>
+                <p>Every item sold undergoes our thorough multi-step verification process by a team of verification
+                    experts.</p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="feature-item flex flex-col items-center">
+                <img src="{{ url_for('static', filename='icon/dollar-tag.png') }}" alt="Transparent Pricing Icon"
+                    class="mx-auto">
+                <h3 class="font-semibold mt-4">Transparent Pricing</h3>
+                <p>Our real-time marketplace operates like a stock market, allowing you to buy and sell highly
+                    sought-after items at true market prices.</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="feature-item flex flex-col items-center">
+                <img src="{{ url_for('static', filename='icon/access-control.png') }}" alt="Global Access Icon"
+                    class="mx-auto">
+                <h3 class="font-semibold mt-4">Global Access</h3>
+                <p>No matter if it's a pre-release, sold out, or an exclusive release, our network of clients in over
+                    200 countries ensures you'll find the item you are looking for.</p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="feature-item flex flex-col items-center">
+                <img src="{{ url_for('static', filename='icon/paper-bag.png') }}" alt="No Worries Icon" class="mx-auto">
+                <h3 class="font-semibold mt-4">No Worries Shopping</h3>
+                <p>Experience hassle-free shopping with no cancellations, no bids, and no need to compete with buyers or
+                    deal with sellers. We handle all steps to ensure a simple and secure purchasing process.</p>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="feature-item flex flex-col items-center">
+                <img src="{{ url_for('static', filename='icon/security.png') }}" alt="Security Icon" class="mx-auto">
+                <h3 class="font-semibold mt-4">Secured Transactions</h3>
+                <p>Protecting the integrity of our marketplace is a step ahead with our security systems and fraud
+                    prevention measures, partnering with the best in the world to keep your information safe 24/7.</p>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="feature-item flex flex-col items-center">
+                <img src="{{ url_for('static', filename='icon/mobile.png') }}" alt="Customer Support Icon"
+                    class="mx-auto">
+                <h3 class="font-semibold mt-4">Here For You</h3>
+                <p>Thanks to our dedicated Help Center and staff, we ensure we're always available to answer all your
+                    questions about our marketplace.</p>
+            </div>
+
+            <!-- Additional features can be included following the same pattern -->
+        </div>
+    </div>
+</div>
+
+<!-- Feature section ends here -->
+
 <script>
     window.addEventListener('DOMContentLoaded', (event) => {
         const slidesContainer = document.getElementById('slides-container');
         let currentIndex = 0;
         let interval = null;
 
-        // Clona le slide originali e aggiungile alla fine del carosello
         document.querySelectorAll('.slide').forEach((slide, index) => {
             const cloneSlide = slide.cloneNode(true);
-            // Ensure the last clone does not have the extra margin
             if (index === document.querySelectorAll('.slide').length - 1) {
-                cloneSlide.classList.add('last-clone'); // Use a class to identify the last clone
                 cloneSlide.style.marginRight = '0px';
             }
             slidesContainer.appendChild(cloneSlide);
         });
 
-        // Adjust the slide width and margin in the translation calculation
-        const slideWidth = 300; // Slide width
-        const slideMargin = 20; // Slide margin
+        const slideWidth = 300;
+        const slideMargin = 20;
 
         function cycleSlides() {
             currentIndex++;
-            // Reset the current index if it's greater than the number of original slides
             if (currentIndex > document.querySelectorAll('.slide').length / 2 - 1) {
                 currentIndex = 0;
-                // Immediately reset the position without transition
                 slidesContainer.style.transition = 'none';
                 slidesContainer.style.transform = `translateX(${currentIndex * (slideWidth + slideMargin)}px)`;
-                // Force a reflow
                 slidesContainer.offsetWidth;
-                // Then, add transitions back after a moment
                 setTimeout(() => {
                     slidesContainer.style.transition = 'transform 0.3s ease-out';
-                    currentIndex++; // Move to the next slide
+                    currentIndex++;
                     slidesContainer.style.transform = `translateX(-${currentIndex * (slideWidth + slideMargin)}px)`;
                 }, 10);
             } else {
@@ -106,7 +213,7 @@
             }
         }
 
-        interval = setInterval(cycleSlides, 2000); // Adjust time as needed
+        interval = setInterval(cycleSlides, 2000);
 
         window.addEventListener('beforeunload', () => {
             if (interval) {
