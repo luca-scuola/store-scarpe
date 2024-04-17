@@ -6,16 +6,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Shoe Store{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Aggiunta di stili personalizzati */
+        /* Stili per la barra di navigazione */
+        nav {
+            background-color: orange;
+            /* Arancione per lo sfondo */
+        }
+
+        nav a {
+            color: #fff;
+            /* Bianco per i link */
+        }
+
+        nav a:hover {
+            color: #333;
+            /* Nero al passaggio del mouse */
+        }
+
+        /* Stili per il corpo della pagina */
+        body {
+            background-color: #f4f4f4;
+            /* Grigio chiaro per lo sfondo */
+            color: #333;
+            /* Grigio scuro per il testo */
+        }
+    </style>
 </head>
 
-<body class="bg-purple-100">
-    <nav class="bg-purple-700 p-4 text-white">
+<body>
+    <nav class="bg-orange-500 p-4 text-white">
         <div class="container mx-auto flex justify-between items-center">
-            <a href="{{ url_for('home') }}" class="text-lg font-bold">Home</a>
-            <div>
-                <a href="{{ url_for('login') }}" class="mr-4">Login</a>
-                <a href="{{ url_for('register') }}">Register</a>
+            <!-- Logo and home icon -->
+            <div class="flex items-center space-x-10">
+                <img src="/static/icon/logo.png" alt="Logo" class="mr-4">
+
+                <a href="{{ url_for('home') }}">
+                    <img src="/static/icon/home.png" alt="Home" class="mr-4">
+                </a>
+
+                <a href="{{ url_for('search_shoes') }}">
+                    <img src="/static/icon/search_home.png" alt="Search" class="mr-4">
+                </a>
+
             </div>
+
+            <!-- Login and registration links -->
+            <div class="flex space-x-4">
+                <a href="{{ url_for('login') }}">
+                    <img src="/static/icon/login.png" alt="Login" class="mr-4">
+                </a>
+
+                <a href="{{ url_for('register') }}">
+                    <img src="/static/icon/register.png" alt="Register" class="mr-4">
+                </a>
+            </div>
+
         </div>
     </nav>
 

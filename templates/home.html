@@ -16,6 +16,7 @@
         /* Bianco per lo sfondo delle slide */
         color: #333;
         /* Grigio scuro per il testo */
+        transition: transform 0.3s ease-in-out;
     }
 
     #slides-container {
@@ -72,8 +73,8 @@
 
     .feature-item:hover {
         transform: translateY(-5px);
-        border-color: #d6bbfb;
-        /* Viola chiaro per il bordo al hover */
+        border-color: #ffa500;
+        /* Arancione per il bordo al hover */
     }
 
     .feature-item img {
@@ -82,8 +83,8 @@
 
     .feature-item h3 {
         font-size: 1.25rem;
-        color: #6b46c1;
-        /* Viola per i titoli */
+        color: #333;
+        /* Grigio scuro per i titoli */
         margin-bottom: 8px;
     }
 
@@ -95,20 +96,12 @@
     }
 
     .text-brand-color {
-        color: #5e9ca0;
-        /* Tuo colore brand per i link */
+        color: #ffa500;
+        /* Arancione per i link */
     }
 
     .hover\:underline:hover {
         text-decoration: underline;
-    }
-
-    @media (min-width: 640px) {
-        .grid-cols-3 {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 1.5rem;
-        }
     }
 </style>
 

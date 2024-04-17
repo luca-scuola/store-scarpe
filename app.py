@@ -45,7 +45,8 @@ def search_shoes():
     db = get_db_connection()
     shoes = db.execute("SELECT * FROM shoes WHERE name LIKE ? OR description LIKE ?", ('%'+query+'%', '%'+query+'%')).fetchall()
     db.close()
-    return render_template('home.html', shoes=shoes)
+    return render_template('search.html', shoes=shoes)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
