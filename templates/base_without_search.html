@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Shoe Store{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+    <nav class="bg-gray-800 p-4 text-white">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="{{ url_for('home') }}" class="text-lg font-bold">Home</a>
+            <div>
+                <a href="{{ url_for('login') }}" class="mr-4">Login</a>
+                <a href="{{ url_for('register') }}">Register</a>
+            </div>
+        </div>
+    </nav>
+
+    {% block content %}
+    <!-- Content will be injected here by child templates -->
+    {% endblock %}
+</body>
+
+</html>

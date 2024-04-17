@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_without_search.html' %}
 
 {% block title %}Home{% endblock %}
 
@@ -7,14 +7,23 @@
     .slide {
         width: 300px;
         margin-right: 20px;
-        display: flex;
+        /* Margin between slides */
+        display: inline-flex;
+        /* Use inline-flex for better control */
         flex-direction: column;
         justify-content: space-between;
         height: 400px;
     }
 
+    /* Style adjustments for the container to ensure consistent margins */
+    #slides-container {
+        margin-right: -20px;
+        /* Negative margin to counteract last slide margin */
+    }
+
     .slide:last-child {
         margin-right: 0;
+        /* Ensures the last slide doesn't have extra space on the right */
     }
 
     .slide h2 {
@@ -37,7 +46,7 @@
     }
 </style>
 
-<div class="container mx-auto mt-8">
+<div class="container mx-auto mt-8 overflow-hidden">
     <h1 class="text-4xl font-bold mb-6 text-center">Welcome to Our Shoe Store</h1>
     <div class="flex overflow-x-scroll hide-scroll-bar pb-10">
         <div id="slides-container" class="flex flex-nowrap">
@@ -61,33 +70,48 @@
         let interval = null;
 
         // Clona le slide originali e aggiungile alla fine del carosello
-        document.querySelectorAll('.slide').forEach(slide => {
+        document.querySelectorAll('.slide').forEach((slide, index) => {
             const cloneSlide = slide.cloneNode(true);
+            // Ensure the last clone does not have the extra margin
+            if (index === document.querySelectorAll('.slide').length - 1) {
+                cloneSlide.classList.add('last-clone'); // Use a class to identify the last clone
+                cloneSlide.style.marginRight = '0px';
+            }
             slidesContainer.appendChild(cloneSlide);
         });
 
+        // Adjust the slide width and margin in the translation calculation
+        const slideWidth = 300; // Slide width
+        const slideMargin = 20; // Slide margin
+
         function cycleSlides() {
-            if (currentIndex >= slidesContainer.children.length - 1) {
+            currentIndex++;
+            // Reset the current index if it's greater than the number of original slides
+            if (currentIndex > document.querySelectorAll('.slide').length / 2 - 1) {
                 currentIndex = 0;
+                // Immediately reset the position without transition
                 slidesContainer.style.transition = 'none';
-                slidesContainer.style.transform = 'translateX(0)';
-                // Utilizza setTimeout per applicare la transizione dopo il reset
+                slidesContainer.style.transform = `translateX(${currentIndex * (slideWidth + slideMargin)}px)`;
+                // Force a reflow
+                slidesContainer.offsetWidth;
+                // Then, add transitions back after a moment
                 setTimeout(() => {
                     slidesContainer.style.transition = 'transform 0.3s ease-out';
-                    slidesContainer.style.transform = `translateX(-${currentIndex * (300 + 20)}px)`;
-                    currentIndex++;
-                }, 20);
+                    currentIndex++; // Move to the next slide
+                    slidesContainer.style.transform = `translateX(-${currentIndex * (slideWidth + slideMargin)}px)`;
+                }, 10);
             } else {
                 slidesContainer.style.transition = 'transform 0.3s ease-out';
-                slidesContainer.style.transform = `translateX(-${currentIndex * (300 + 20)}px)`;
-                currentIndex++;
+                slidesContainer.style.transform = `translateX(-${currentIndex * (slideWidth + slideMargin)}px)`;
             }
         }
 
-        interval = setInterval(cycleSlides, 3000);
+        interval = setInterval(cycleSlides, 2000); // Adjust time as needed
 
         window.addEventListener('beforeunload', () => {
-            clearInterval(interval);
+            if (interval) {
+                clearInterval(interval);
+            }
         });
     });
 </script>
