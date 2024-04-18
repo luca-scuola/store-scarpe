@@ -39,14 +39,6 @@ def home():
     db.close()
     return render_template('home.html', shoes=shoes)
 
-@app.route('/search_shoes', methods=['GET'])
-def search_shoes():
-    query = request.args.get('query', '')
-    db = get_db_connection()
-    shoes = db.execute("SELECT * FROM shoes WHERE name LIKE ? OR description LIKE ?", ('%'+query+'%', '%'+query+'%')).fetchall()
-    db.close()
-    return render_template('search.html', shoes=shoes)
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -158,17 +150,15 @@ def delete_shoe():
 @app.route('/user', methods=['GET', 'POST'])
 def user_index():
     if 'user' in session and session['role'] == 'user':
-        user_id = session['user_id']
         db = get_db_connection()
-        cart_shoes = db.execute('SELECT * FROM shoes JOIN cart ON shoes.id = cart.shoe_id WHERE cart.user_id = ?', (user_id,)).fetchall()
+        shoes = db.execute('SELECT * FROM shoes').fetchall()
         reviews = {}
-        for shoe in cart_shoes:
+        for shoe in shoes:
             shoe_reviews = db.execute('SELECT * FROM reviews WHERE shoe_id = ?', (shoe['id'],)).fetchall()
             reviews[shoe['id']] = shoe_reviews
         db.close()
-        return render_template('user_index.html', shoes=cart_shoes, reviews=reviews)
+        return render_template('user_index.html', shoes=shoes, reviews=reviews)
     return redirect(url_for('login'))
-
 
 @app.route('/edit_shoe/<int:shoe_id>', methods=['GET'])
 def edit_shoe(shoe_id):
@@ -200,29 +190,41 @@ def update_shoe(shoe_id):
     
     return redirect(url_for('admin_index'))
 
-@app.route('/shoe/<int:shoe_id>')
-def shoe_details(shoe_id):
-    db = get_db_connection()
-    shoe = db.execute('SELECT * FROM shoes WHERE id = ?', (shoe_id,)).fetchone()
-    db.close()
-    if shoe:
-        return render_template('shoe_details.html', shoe=shoe)
-    else:
-        return 'Scarpa non trovata', 404
-    
-
-@app.route('/add_to_cart/<int:shoe_id>', methods=['POST'])
-def add_to_cart(shoe_id):
-    if 'user_id' not in session:
-        flash("You need to be logged in to add items to your cart.")
+@app.route('/add_to_cart', methods=['POST'])
+def add_to_cart():
+    if 'user' not in session:
+        flash('You need to login to add items to the cart.')
         return redirect(url_for('login'))
+
+    shoe_id = request.form['shoe_id']
     user_id = session['user_id']
+
+    # Assuming you have a table for cart items
     db = get_db_connection()
     db.execute('INSERT INTO cart (user_id, shoe_id) VALUES (?, ?)', (user_id, shoe_id))
     db.commit()
     db.close()
-    flash("Shoe added to cart successfully!")
-    return redirect(url_for('shoe_details', shoe_id=shoe_id))
+
+    flash('Shoe added to cart successfully.')
+    return redirect(url_for('user_index'))
+
+
+@app.route('/view_cart')
+def view_cart():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
+    user_id = session['user_id']
+    db = get_db_connection()
+    # Modifica la query per recuperare le informazioni della scarpa direttamente
+    cart_items = db.execute('''
+        SELECT shoes.*, cart.id AS cart_id FROM cart
+        JOIN shoes ON cart.shoe_id = shoes.id
+        WHERE cart.user_id = ?
+    ''', (user_id,)).fetchall()
+    db.close()
+
+    return render_template('cart.html', cart_items=cart_items)
 
 
 
