@@ -11,142 +11,166 @@
         /* Overall body styling */
         body {
             background-color: #fff;
+            font-family: 'Arial', sans-serif;
         }
 
         /* Header styling */
         .header {
-            background-color: #FFA500;
-            /* Orange background */
+            background-color: #fb7e21;
             color: #000;
-            /* Black text */
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+
+        .header a:first-child {
+            margin-left: 20px;
+        }
+
+        .header div {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Welcome message */
+        .welcome-message {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+            font-weight: bold;
         }
 
         /* Card styling for products */
         .card {
             background-color: #fff;
-            border: 2px solid #FFA500;
-            /* Orange border */
+            border: 2px solid #fb7e21;
             border-radius: 8px;
-            /* Rounded corners */
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
         }
 
         /* Styling for buttons */
         .button-add,
         .button-review {
             background-color: #000;
-            /* Black background */
             color: #fff;
-            /* White text */
             border: none;
             padding: 8px 16px;
-            margin: 4px;
+            margin-top: 10px;
             border-radius: 4px;
             cursor: pointer;
         }
 
         .button-add:hover,
         .button-review:hover {
-            background-color: #FFA500;
-            /* Orange background on hover */
+            background-color: #fb7e21;
         }
 
-        /* Price and review text styling */
-        .price,
-        .review-text {
-            color: #000;
-            /* Black text */
+        /* Text styling for description and price */
+        .description,
+        .price {
+            text-align: left;
+            /* Aligning text to the left */
+            margin-top: 10px;
         }
 
         /* Logout link styling */
         .logout-link {
-            color: #FFA500;
-            /* Orange text */
+            color: #fb7e21;
             text-decoration: none;
             font-weight: bold;
         }
 
         .logout-link:hover {
             color: #000;
-            /* Black text on hover */
         }
 
         /* Review form styling */
         .review-form {
             padding: 16px;
             background-color: #f7f7f7;
-            /* Light grey background */
-            border-top: 2px solid #FFA500;
-            /* Orange border */
+            border-top: 2px solid #fb7e21;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
         }
 
-        .review-textarea {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 8px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            /* Light grey border */
+        .review-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
+        .review-textarea,
         .review-rating {
             width: 100%;
             padding: 8px;
             border-radius: 4px;
             border: 1px solid #ddd;
-            /* Light grey border */
-            margin-right: 8px;
+        }
+
+        .review-rating {
+            width: 150px;
+            /* Restrict width of the rating input */
         }
     </style>
 </head>
 
 <body>
-    <div class="container mx-auto px-4 py-4">
-        <div class="header py-4 mb-6 flex justify-between items-center">
-            <a href="{{ url_for('home') }}">
-                <img src="{{ url_for('static', filename='icon/logo.png') }}" alt="Logo" style="height: 50px;">
+    <div class="header py-4 mb-6 flex justify-between items-center">
+        <a href="{{ url_for('home') }}" style="margin-left: 20px;">
+            <img src="{{ url_for('static', filename='icon/logo.png') }}" alt="Logo" style="height: 50px;">
+        </a>
+
+        <div>
+            <a href="{{ url_for('view_cart') }}">
+                <img src="{{ url_for('static', filename='icon/cart.png') }}" alt="Cart" style="height: 40px;">
             </a>
-
-            <div>
-                <a href="{{ url_for('view_cart') }}">
-                    <img src="{{ url_for('static', filename='icon/cart.png') }}" alt="Cart" style="height: 40px;">
-                </a>
-            </div>
+            <a href="{{ url_for('logout') }}" style="margin-left: 10px;">
+                <img src="{{ url_for('static', filename='icon/logout.png') }}" alt="Logout" style="height: 40px;">
+            </a>
         </div>
+    </div>
 
-        <!-- Product listing -->
-        {% for shoe in shoes %}
-        <div class="card p-4 mb-6">
-            <img src="{{ url_for('static', filename='images/' + shoe.image_url) }}" alt="{{ shoe.name }}"
-                class="block mx-auto" style="max-width: 200px;">
-            <div class="text-center">
-                <h3 class="text-lg font-medium my-2">{{ shoe.name }}</h3>
-                <p class="text-sm">{{ shoe.description }}</p>
-                <p class="price"><strong>Price:</strong> €{{ shoe.price }}</p>
-                <form action="{{ url_for('add_to_cart') }}" method="post">
-                    <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
-                    <button type="submit" class="button-add">Add to Cart</button>
-                </form>
-            </div>
-            {% if 'user' in session %}
-            <div class="review-form">
-                <form action="{{ url_for('add_review') }}" method="post">
-                    <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
+    <div class="welcome-message">
+        Welcome {{ user_name }} to Your User Dashboard!
+    </div>
+
+    <!-- Product listing -->
+    {% for shoe in shoes %}
+    <div class="card p-4 mb-6">
+        <img src="{{ url_for('static', filename='images/' + shoe.image_url) }}" alt="{{ shoe.name }}"
+            class="block mx-auto" style="max-width: 200px;">
+        <div class="text-center">
+            <h3 class="text-lg font-medium my-2">{{ shoe.name }}</h3>
+            <p class="description">{{ shoe.description }}</p>
+            <p class="price"><strong>Price:</strong> {{ shoe.price }}</p>
+            <form action="{{ url_for('add_to_cart') }}" method="post">
+                <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
+                <button type="submit" class="button-add">Add to Cart</button>
+            </form>
+        </div>
+        {% if 'user' in session %}
+        <div class="review-form">
+            <form action="{{ url_for('add_review') }}" method="post">
+                <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
+                <div class="review-controls">
                     <textarea name="review_text" class="review-textarea" placeholder="Leave a review"
                         required></textarea>
-                    <div class="flex justify-between items-center">
-                        <input type="number" name="rating" class="review-rating" min="1" max="5" required
-                            placeholder="Rating (1-5)">
-                        <button type="submit" class="button-review">Submit Review</button>
-                    </div>
-                </form>
-            </div>
-            {% endif %}
+                    <input type="number" name="rating" class="review-rating" min="1" max="5" required
+                        placeholder="Rating (1-5)">
+                </div>
+                <button type="submit" class="button-review">Submit Review</button>
+            </form>
         </div>
-        {% endfor %}
+        {% endif %}
+    </div>
+    {% endfor %}
 
-        <div class="text-center mt-6">
-            <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
-        </div>
+    <div class="text-center mt-6">
+        <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
     </div>
 </body>
 

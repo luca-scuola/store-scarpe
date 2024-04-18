@@ -227,6 +227,16 @@ def view_cart():
     return render_template('cart.html', cart_items=cart_items)
 
 
+@app.route('/search')
+def search():
+    query = request.args.get('query', '')
+    if query:
+        # Assuming 'Shoe' is a model for your shoes in the database
+        results = Shoe.query.filter(Shoe.name.ilike(f'%{query}%')).all()
+    else:
+        results = []
+    return render_template('search_results.html', shoes=results)
+
 
 
 
