@@ -126,15 +126,15 @@ def add_review():
     user_id = session['user_id']
     shoe_id = request.form['shoe_id']
     review_text = request.form['review_text']
-    rating = request.form['rating']
 
     db = get_db_connection()
-    db.execute('INSERT INTO reviews (shoe_id, user_id, review_text, rating) VALUES (?, ?, ?, ?)',
-               (shoe_id, user_id, review_text, rating))
+    db.execute('INSERT INTO reviews (shoe_id, user_id, review_text) VALUES (?, ?, ?)',
+               (shoe_id, user_id, review_text))
     db.commit()
     db.close()
 
     return redirect(url_for('user_index'))
+
 
 @app.route('/delete_shoe', methods=['POST'])
 def delete_shoe():
@@ -231,11 +231,13 @@ def view_cart():
 def search():
     query = request.args.get('query', '')
     if query:
-        # Assuming 'Shoe' is a model for your shoes in the database
-        results = Shoe.query.filter(Shoe.name.ilike(f'%{query}%')).all()
+        db = get_db_connection()
+        results = db.execute('SELECT * FROM shoes WHERE name LIKE ?', ('%' + query + '%',)).fetchall()
+        db.close()
+        return render_template('user_index.html', shoes=results, user_name=session.get('user', 'Guest'))
     else:
-        results = []
-    return render_template('search_results.html', shoes=results)
+        return redirect(url_for('user_index'))
+
 
 
 

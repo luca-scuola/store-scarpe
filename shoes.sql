@@ -15,18 +15,18 @@ CREATE TABLE IF NOT EXISTS users (
     role TEXT NOT NULL DEFAULT 'user'
 );
 
--- Creazione della tabella per le recensioni
+-- Modifying the creation of the reviews table
 CREATE TABLE IF NOT EXISTS reviews (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     shoe_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     review_text TEXT NOT NULL,
-    rating INTEGER DEFAULT 0,
     FOREIGN KEY(shoe_id) REFERENCES shoes(id),
     FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
-CREATE TABLE cart (
+
+CREATE TABLE IF NOT EXISTS cart (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
     shoe_id INTEGER,

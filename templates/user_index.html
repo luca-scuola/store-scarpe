@@ -18,19 +18,53 @@
         .header {
             background-color: #fb7e21;
             color: #000;
-            padding-left: 30px;
-            padding-right: 30px;
+            padding: 2rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 3rem;
+            /* Increase left padding to push logo to the right */
+            padding-right: 1rem;
+            /* Ensure symmetry */
         }
 
-        .header a:first-child {
-            margin-left: 20px;
-        }
-
-        .header div {
+        .icons-container {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 40px;
+            /* Increase the gap between icons */
+            margin-left: 0;
+            /* Move icons container more to the left */
         }
+
+
+        /* Search box styling */
+        .search-box {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .search-box input[type="text"] {
+            padding: 8px;
+            margin-right: 10px;
+            border: 2px solid #000;
+            border-radius: 8px;
+        }
+
+        .search-box button {
+            padding: 8px 16px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .search-box button:hover {
+            background-color: #fb7e21;
+        }
+
+
 
         /* Welcome message */
         .welcome-message {
@@ -71,7 +105,6 @@
         .description,
         .price {
             text-align: left;
-            /* Aligning text to the left */
             margin-top: 10px;
         }
 
@@ -116,19 +149,27 @@
             /* Restrict width of the rating input */
         }
     </style>
+
 </head>
 
 <body>
-    <div class="header py-4 mb-6 flex justify-between items-center">
-        <a href="{{ url_for('home') }}" style="margin-left: 20px;">
+    <div class="header">
+        <a href="{{ url_for('home') }}">
             <img src="{{ url_for('static', filename='icon/logo.png') }}" alt="Logo" style="height: 50px;">
         </a>
 
-        <div>
+        <div class="search-box">
+            <form action="{{ url_for('search') }}" method="get">
+                <input type="text" name="query" placeholder="Search for shoes..." required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <div class="icons-container">
             <a href="{{ url_for('view_cart') }}">
                 <img src="{{ url_for('static', filename='icon/cart.png') }}" alt="Cart" style="height: 40px;">
             </a>
-            <a href="{{ url_for('logout') }}" style="margin-left: 10px;">
+            <a href="{{ url_for('logout') }}">
                 <img src="{{ url_for('static', filename='icon/logout.png') }}" alt="Logout" style="height: 40px;">
             </a>
         </div>
@@ -156,13 +197,10 @@
         <div class="review-form">
             <form action="{{ url_for('add_review') }}" method="post">
                 <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
-                <div class="review-controls">
-                    <textarea name="review_text" class="review-textarea" placeholder="Leave a review"
-                        required></textarea>
-                    <input type="number" name="rating" class="review-rating" min="1" max="5" required
-                        placeholder="Rating (1-5)">
+                <textarea name="review_text" class="review-textarea" placeholder="Leave a review" required></textarea>
+                <div class="text-center">
+                    <button type="submit" class="button-review">Submit Review</button>
                 </div>
-                <button type="submit" class="button-review">Submit Review</button>
             </form>
         </div>
         {% endif %}
