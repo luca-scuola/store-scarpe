@@ -5,55 +5,148 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #fff;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .header {
+            background-color: #fb7e21;
+            color: #000;
+            padding: 2rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 3rem;
+            padding-right: 1rem;
+        }
+
+        .search-box {
+            display: none;
+            /* Hide search in admin dashboard */
+        }
+
+        .icons-container {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-left: 0;
+        }
+
+        .welcome-message {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .card {
+            background-color: #fff;
+            border: 2px solid #fb7e21;
+            border-radius: 8px;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .button-add,
+        .button-review {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            margin-top: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .button-add:hover,
+        .button-review:hover {
+            background-color: #fb7e21;
+        }
+
+        .description,
+        .price {
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        .logout-link {
+            color: #fb7e21;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .logout-link:hover {
+            color: #000;
+        }
+
+        .review-form,
+        .review-controls,
+        .review-textarea,
+        .review-rating {
+            display: none;
+            /* Hide review elements in admin dashboard */
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100">
+<body>
+    <div class="header">
+        <a href="{{ url_for('home') }}">
+            <img src="{{ url_for('static', filename='icon/logo.png') }}" alt="Logo" style="height: 50px;">
+        </a>
+        <div class="icons-container">
+            <a href="{{ url_for('logout') }}">
+                <img src="{{ url_for('static', filename='icon/logout.png') }}" alt="Logout" style="height: 40px;">
+            </a>
+        </div>
+    </div>
+
+    <div class="welcome-message">
+        Welcome to the Admin Dashboard!
+    </div>
+
     <div class="container mx-auto px-4 py-4">
-        <h1 class="text-3xl font-bold mb-4">Admin Dashboard</h1>
-        <h2 class="text-xl font-semibold">Manage Shoes</h2>
+        <h1 class="text-3xl font-bold mb-4">Manage Shoes</h1>
         <div class="my-4">
             <form action="{{ url_for('add_shoe') }}" method="post" enctype="multipart/form-data">
                 <input type="text" name="name" placeholder="Shoe Name" required>
                 <textarea name="description" placeholder="Description" required></textarea>
-                <input type="text" name="price" placeholder="Price" required> <!-- Aggiunto il campo per il prezzo -->
+                <input type="text" name="price" placeholder="Price" required>
                 <input type="file" name="image" required>
-                <button type="submit">Add Shoe</button>
+                <button type="submit" class="button-add">Add Shoe</button>
             </form>
             {% for shoe in shoes %}
-            <div class="border p-4 rounded mb-2">
-                <p><strong>Name:</strong> {{ shoe.name }}</p>
-                <p><strong>Description:</strong> {{ shoe.description }}</p>
-                <p><strong>Price:</strong> €{{ shoe.price }}</p> <!-- Aggiunto il prezzo -->
+            <div class="card p-4 mb-6">
                 <img src="{{ url_for('static', filename='images/' + shoe.image_url) }}" alt="Shoe Image"
-                    style="height: 100px;">
-                <form action="{{ url_for('delete_shoe') }}" method="post" style="display:inline;">
-                    <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
-                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded">Delete
-                        Shoe</button>
-                </form>
-                <form action="{{ url_for('edit_shoe', shoe_id=shoe.id) }}" method="get" style="display:inline;">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded">Modify
-                        Shoe</button>
-                </form>
+                    style="max-width: 200px;">
+                <div class="text-center">
+                    <p><strong>Name:</strong> {{ shoe.name }}</p>
+                    <p><strong>Description:</strong> {{ shoe.description }}</p>
+                    <p class="price"><strong>Price:</strong> €{{ shoe.price }}</p>
+                    <form action="{{ url_for('delete_shoe') }}" method="post" style="display:inline;">
+                        <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
+                        <button type="submit"
+                            class="button-review bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded">Delete
+                            Shoe</button>
+                    </form>
+                    <form action="{{ url_for('edit_shoe', shoe_id=shoe.id) }}" method="get" style="display:inline;">
+                        <button type="submit"
+                            class="button-review bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded">Modify
+                            Shoe</button>
+                    </form>
+                </div>
             </div>
             {% endfor %}
         </div>
+    </div>
 
-        <h2 class="text-xl font-semibold">Manage Reviews</h2>
-        <div class="my-4">
-            {% for review in reviews %}
-            <div class="border p-4 rounded mb-2">
-                <p><strong>Review:</strong> {{ review.review_text }}</p>
-                <p><strong>Rating:</strong> {{ review.rating }}/5</p>
-                <form action="{{ url_for('delete_review') }}" method="post">
-                    <input type="hidden" name="review_id" value="{{ review.id }}">
-                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded">Delete
-                        Review</button>
-                </form>
-            </div>
-            {% endfor %}
-        </div>
+    <div class="text-center mt-6">
+        <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
     </div>
 </body>
 
