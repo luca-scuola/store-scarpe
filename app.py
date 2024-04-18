@@ -158,15 +158,17 @@ def delete_shoe():
 @app.route('/user', methods=['GET', 'POST'])
 def user_index():
     if 'user' in session and session['role'] == 'user':
+        user_id = session['user_id']
         db = get_db_connection()
-        shoes = db.execute('SELECT * FROM shoes').fetchall()
+        cart_shoes = db.execute('SELECT * FROM shoes JOIN cart ON shoes.id = cart.shoe_id WHERE cart.user_id = ?', (user_id,)).fetchall()
         reviews = {}
-        for shoe in shoes:
+        for shoe in cart_shoes:
             shoe_reviews = db.execute('SELECT * FROM reviews WHERE shoe_id = ?', (shoe['id'],)).fetchall()
             reviews[shoe['id']] = shoe_reviews
         db.close()
-        return render_template('user_index.html', shoes=shoes, reviews=reviews)
+        return render_template('user_index.html', shoes=cart_shoes, reviews=reviews)
     return redirect(url_for('login'))
+
 
 @app.route('/edit_shoe/<int:shoe_id>', methods=['GET'])
 def edit_shoe(shoe_id):
@@ -207,6 +209,23 @@ def shoe_details(shoe_id):
         return render_template('shoe_details.html', shoe=shoe)
     else:
         return 'Scarpa non trovata', 404
+    
+
+@app.route('/add_to_cart/<int:shoe_id>', methods=['POST'])
+def add_to_cart(shoe_id):
+    if 'user_id' not in session:
+        flash("You need to be logged in to add items to your cart.")
+        return redirect(url_for('login'))
+    user_id = session['user_id']
+    db = get_db_connection()
+    db.execute('INSERT INTO cart (user_id, shoe_id) VALUES (?, ?)', (user_id, shoe_id))
+    db.commit()
+    db.close()
+    flash("Shoe added to cart successfully!")
+    return redirect(url_for('shoe_details', shoe_id=shoe_id))
+
+
+
 
 
 if __name__ == '__main__':

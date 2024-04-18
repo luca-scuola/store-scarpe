@@ -6,11 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Shoe Store{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
-        /* Aggiunta di stili personalizzati */
-        /* Stili per la barra di navigazione */
+        /* Custom styles */
         nav {
-            background-color: orange;
+            /* Increased padding for a taller navigation bar */
+            padding: 1.5rem 0;
+        }
+
+        nav {
+            background-color: #fb7e21;
             /* Arancione per lo sfondo */
         }
 
@@ -31,24 +36,51 @@
             color: #333;
             /* Grigio scuro per il testo */
         }
+
+        /* Footer styles */
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links li:last-child {
+            margin-bottom: 0;
+        }
+
+        .footer-links a {
+            color: #999;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .bg-brand-color {
+            background-color: #fb7e21;
+        }
+
+        .bg-brand-color-light {
+            background-color: #fc8d34;
+        }
+
+        .border-gray-700 {
+            border-color: #333333;
+        }
     </style>
 </head>
 
 <body>
-    <nav class="bg-orange-500 p-4 text-white">
+    <nav class="bg-orange-500 text-white">
         <div class="container mx-auto flex justify-between items-center">
             <!-- Logo and home icon -->
             <div class="flex items-center space-x-10">
                 <img src="/static/icon/logo.png" alt="Logo" class="mr-4">
-
                 <a href="{{ url_for('home') }}">
                     <img src="/static/icon/home.png" alt="Home" class="mr-4">
                 </a>
-
                 <a href="{{ url_for('search_shoes') }}">
                     <img src="/static/icon/search_home.png" alt="Search" class="mr-4">
                 </a>
-
             </div>
 
             <!-- Login and registration links -->
@@ -56,17 +88,19 @@
                 <a href="{{ url_for('login') }}">
                     <img src="/static/icon/login.png" alt="Login" class="mr-4">
                 </a>
-
                 <a href="{{ url_for('register') }}">
                     <img src="/static/icon/register.png" alt="Register" class="mr-4">
                 </a>
             </div>
-
         </div>
     </nav>
 
     {% block content %}
     <!-- Content will be injected here by child templates -->
+    {% endblock %}
+
+    {% block footer %}
+    <!-- Footer will be injected here by child templates -->
     {% endblock %}
 </body>
 

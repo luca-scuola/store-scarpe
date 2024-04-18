@@ -3,6 +3,7 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+<!-- Existing content and styles from your initial code -->
 <style>
     /* Stili principali delle slide */
     .slide {
@@ -17,7 +18,7 @@
         color: #333;
         /* Grigio scuro per il testo */
         transition: transform 0.3s ease-in-out;
-        border: 1px solid #ffa500;
+        border: 1px solid #fb7e21;
         /* Bordo arancione */
         border-radius: 8px;
         /* Bordi arrotondati */
@@ -59,9 +60,16 @@
     }
 
     /* Sezione delle feature */
+    /* Sezione delle feature */
     .feature-section {
         padding-top: 2rem;
         padding-bottom: 2rem;
+    }
+
+    /* Additional margin for spacing between features and footer */
+    .feature-section {
+        margin-bottom: 200px;
+        /* Adjust this value as needed for more space */
     }
 
     .feature-item {
@@ -77,7 +85,7 @@
 
     .feature-item:hover {
         transform: translateY(-5px);
-        border-color: #ffa500;
+        border-color: #fb7e21;
         /* Arancione per il bordo al hover */
     }
 
@@ -100,12 +108,65 @@
     }
 
     .text-brand-color {
-        color: #ffa500;
+        color: #fb7e21;
         /* Arancione per i link */
     }
 
     .hover\:underline:hover {
         text-decoration: underline;
+    }
+
+    /* Footer specific styles */
+    .footer-links li {
+        margin-bottom: 0.5rem;
+    }
+
+    .footer-links li:last-child {
+        margin-bottom: 0;
+    }
+
+    .footer-links a {
+        color: #999;
+        transition: color 0.3s ease-in-out;
+    }
+
+    .footer-links a:hover {
+        color: #fff;
+    }
+
+    .bg-brand-color {
+        background-color: #fb7e21;
+    }
+
+    .bg-brand-color-light {
+        background-color: #fc8d34;
+    }
+
+    .border-gray-700 {
+        border-color: #333333;
+    }
+
+    #subscription-message {
+        display: none;
+        /* Hidden by default */
+        background-color: #90ee90;
+        /* Light green background */
+        color: black;
+        /* Black text color */
+        text-align: center;
+        /* Centered text */
+        padding: 0.5rem 1rem;
+        /* Some padding */
+        border-radius: 0.5rem;
+        /* Rounded corners */
+        margin-top: 1rem;
+        /* Space above the message */
+        width: fit-content;
+        /* Only as wide as necessary */
+        margin-left: auto;
+        /* Center in the parent */
+        margin-right: auto;
+        /* Center in the parent */
     }
 </style>
 
@@ -226,6 +287,104 @@
                 clearInterval(interval);
             }
         });
+
+        document.getElementById('subscribe-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Stop the actual form submission
+
+            // Show the subscription message
+            var messageBox = document.getElementById('subscription-message');
+            messageBox.style.display = 'block'; // Make the message box visible
+
+            // Optionally, hide the form
+            document.getElementById('subscribe-form').style.display = 'none';
+        });
     });
 </script>
+
+{% endblock %}
+
+{% block footer %}
+<footer class="bg-black text-white py-8">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-wrap -mx-4">
+            <div class="w-full lg:w-1/3 px-4 mb-8 lg:mb-0">
+                <h2 class="text-xl font-semibold mb-6">Top Collections</h2>
+                <ul class="list-none footer-links">
+                    <li>Air Jordan 4</li>
+                    <li>Air Jordan 1</li>
+                    <li>Nike Dunk</li>
+                    <li>UGG</li>
+                    <li>Yeezy</li>
+                    <li>Yeezy 350</li>
+                    <li>Yeezy Slides</li>
+                    <li>Yeezy 700</li>
+                    <li>Air Force 1</li>
+                    <li>Travis Scott</li>
+                    <li>Off-White</li>
+                </ul>
+                <a href="#" class="text-gray-400 hover:text-gray-200 text-sm">View More</a>
+            </div>
+            <div class="w-full lg:w-1/3 px-4">
+                <div class="flex justify-evenly lg:block">
+                    <div class="mb-8">
+                        <h2 class="text-xl font-semibold mb-6">Follow us</h2>
+                        <div class="flex items-center">
+                            <a href="#" class="text-gray-400 hover:text-gray-200 text-2xl mr-4"><i
+                                    class="fab fa-facebook-square"></i></a>
+                            <a href="#" class="text-gray-400 hover:text-gray-200 text-2xl mr-4"><i
+                                    class="fab fa-twitter"></i></a>
+                            <a href="#" class="text-gray-400 hover:text-gray-200 text-2xl mr-4"><i
+                                    class="fab fa-instagram"></i></a>
+                            <a href="#" class="text-gray-400 hover:text-gray-200 text-2xl mr-4"><i
+                                    class="fab fa-youtube"></i></a>
+                            <a href="#" class="text-gray-400 hover:text-gray-200 text-2xl"><i
+                                    class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-semibold mb-6">Customer Service</h2>
+                        <ul class="list-none footer-links">
+                            <li><a href="{{ url_for('login') }}" class="text-gray-400 hover:text-gray-200">My
+                                    account</a></li>
+                            <li><a href="{{ url_for('register') }}" class="text-gray-400 hover:text-gray-200"> Create an
+                                    account</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-gray-200">FAQs</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-gray-200">Contact Us</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-gray-200">Privacy Policy</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-gray-200">Refund Policy</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-gray-200">Terms of Service</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-gray-200">Shipping Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/3 px-4">
+                <h2 class="text-xl font-semibold mb-6">Newsletter</h2>
+                <form id="subscribe-form" action="javascript:void(0);" method="post">
+                    <div class="mb-4">
+                        <input type="email" placeholder="Enter your email" class="px-4 py-2 w-full text-black" required>
+                    </div>
+                    <div class="mb-6">
+                        <label class="inline-block cursor-pointer">
+                            <input type="radio" name="gender" value="male" class="mr-2">Male
+                        </label>
+                        <label class="inline-block cursor-pointer ml-6">
+                            <input type="radio" name="gender" value="female" class="mr-2">Female
+                        </label>
+                    </div>
+                    <button type="submit"
+                        class="px-6 py-2 bg-brand-color text-white font-semibold rounded-md hover:bg-brand-color-light">Subscribe</button>
+                </form>
+                <!-- Subscription message -->
+                <div id="subscription-message"
+                    style="display: none; background-color: #90ee90; color: black; text-align: center; padding: 0.5rem 1rem; border-radius: 0.5rem; margin-top: 1rem; width: fit-content; margin-left: auto; margin-right: auto;">
+                    Thanks for subscribing!
+                </div>
+            </div>
+        </div>
+        <div class="pt-8 mt-8 border-t border-gray-700 text-center text-sm">
+            &copy; 2024, Limited. Company No. 08761997 VAT No. GB170801090
+        </div>
+    </div>
+</footer>
 {% endblock %}

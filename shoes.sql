@@ -25,3 +25,13 @@ CREATE TABLE IF NOT EXISTS reviews (
     FOREIGN KEY(shoe_id) REFERENCES shoes(id),
     FOREIGN KEY(user_id) REFERENCES users(id)
 );
+
+CREATE TABLE IF NOT EXISTS cart (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    shoe_id INTEGER NOT NULL,
+    FOREIGN KEY(user_id) REFERENCES users(id),
+    FOREIGN KEY(shoe_id) REFERENCES shoes(id)
+);
+
+
