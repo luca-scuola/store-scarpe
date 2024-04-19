@@ -33,5 +33,3 @@ CREATE TABLE IF NOT EXISTS cart (
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (shoe_id) REFERENCES shoes(id)
 );
-
-

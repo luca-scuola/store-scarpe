@@ -154,11 +154,16 @@ def user_index():
         shoes = db.execute('SELECT * FROM shoes').fetchall()
         reviews = {}
         for shoe in shoes:
-            shoe_reviews = db.execute('SELECT * FROM reviews WHERE shoe_id = ?', (shoe['id'],)).fetchall()
+            shoe_reviews = db.execute('''
+                SELECT r.*, u.username FROM reviews r
+                JOIN users u ON r.user_id = u.id
+                WHERE r.shoe_id = ?
+            ''', (shoe['id'],)).fetchall()
             reviews[shoe['id']] = shoe_reviews
         db.close()
         return render_template('user_index.html', shoes=shoes, reviews=reviews)
     return redirect(url_for('login'))
+
 
 @app.route('/edit_shoe/<int:shoe_id>', methods=['GET'])
 def edit_shoe(shoe_id):
@@ -233,10 +238,19 @@ def search():
     if query:
         db = get_db_connection()
         results = db.execute('SELECT * FROM shoes WHERE name LIKE ?', ('%' + query + '%',)).fetchall()
+        reviews = {}
+        for shoe in results:
+            shoe_reviews = db.execute('''
+                SELECT r.*, u.username FROM reviews r
+                JOIN users u ON r.user_id = u.id
+                WHERE r.shoe_id = ?
+            ''', (shoe['id'],)).fetchall()
+            reviews[shoe['id']] = shoe_reviews
         db.close()
-        return render_template('user_index.html', shoes=results, user_name=session.get('user', 'Guest'))
+        return render_template('user_index.html', shoes=results, reviews=reviews, user_name=session.get('user', 'Guest'))
     else:
         return redirect(url_for('user_index'))
+
 
 
 

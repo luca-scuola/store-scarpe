@@ -7,16 +7,21 @@
     <title>Admin Dashboard</title>
     <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+20&family=Jersey+25&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: #fff;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Comic sans', sans-serif;
         }
 
         .header {
             background-color: #fb7e21;
             color: #000;
-            padding: 2rem 0;
+            padding: 1rem 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -50,6 +55,29 @@
             max-width: 900px;
             margin: 40px auto;
             padding: 20px;
+            text-align: center;
+            /* Center content */
+        }
+
+        .card img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 200px;
+            /* Adjust as necessary */
+        }
+
+        .card-text {
+            text-align: left;
+            /* Align text to the left for description and price */
+            display: inline-block;
+            width: 100%;
+            /* Full width */
+        }
+
+        .button-container {
+            text-align: center;
+            /* Center buttons */
         }
 
         .button-add,
@@ -68,10 +96,10 @@
             background-color: #fb7e21;
         }
 
-        .description,
-        .price {
-            text-align: left;
-            margin-top: 10px;
+        .description-text,
+        .price-text {
+            font-family: 'Titillium Web', sans-serif;
+            /* Apply Titillium Web font */
         }
 
         .logout-link {
@@ -91,13 +119,94 @@
             display: none;
             /* Hide review elements in admin dashboard */
         }
+
+        .jersey-20-regular {
+            font-family: 'Jersey 20', sans-serif;
+            font-size: 36px;
+            display: block;
+            /* Make sure the name takes the full line */
+        }
+
+        .add-shoe-form {
+            background: #f7f7f7;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .add-shoe-form h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+            font-weight: bold;
+        }
+
+        .add-shoe-form input,
+        .add-shoe-form textarea,
+        .add-shoe-form button {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 0.375rem;
+        }
+
+        .add-shoe-form button {
+            background-color: #000;
+            color: white;
+            font-weight: bold;
+        }
+
+        .add-shoe-form button:hover {
+            background-color: #fb7e21;
+        }
+
+        .form-container {
+            background: #f7f7f7;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 2rem;
+            max-width: 500px;
+            /* Adjusted for a narrower form */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-container h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #fb7e21;
+        }
+
+        .form-container input,
+        .form-container textarea,
+        .form-container button {
+            width: calc(100% - 1.5rem);
+            /* Adjust width to account for padding */
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 0.375rem;
+        }
+
+        .form-container button {
+            background-color: #000;
+            color: white;
+            font-weight: bold;
+        }
+
+        .form-container button:hover {
+            background-color: #fb7e21;
+        }
     </style>
 </head>
 
 <body>
     <div class="header">
         <a href="{{ url_for('home') }}">
-            <img src="{{ url_for('static', filename='icon/logo.png') }}" alt="Logo" style="height: 50px;">
+            <img src="{{ url_for('static', filename='icon/logo.png') }}" alt="Logo">
         </a>
         <div class="icons-container">
             <a href="{{ url_for('logout') }}">
@@ -106,13 +215,19 @@
         </div>
     </div>
 
+    </br>
+
     <div class="welcome-message">
         Welcome to the Admin Dashboard!
     </div>
 
+    </br>
+    </br>
+    </br>
+
     <div class="container mx-auto px-4 py-4">
-        <h1 class="text-3xl font-bold mb-4">Manage Shoes</h1>
-        <div class="my-4">
+        <div class="form-container">
+            <h2 class="text-center">Add New Shoe</h2>
             <form action="{{ url_for('add_shoe') }}" method="post" enctype="multipart/form-data">
                 <input type="text" name="name" placeholder="Shoe Name" required>
                 <textarea name="description" placeholder="Description" required></textarea>
@@ -120,14 +235,22 @@
                 <input type="file" name="image" required>
                 <button type="submit" class="button-add">Add Shoe</button>
             </form>
+        </div>
+
+        </br>
+        </br>
+
+        <h1 class="text-3xl font-bold mb-4 text-center">Manage Shoes</h1>
+        <div class="my-4">
             {% for shoe in shoes %}
             <div class="card p-4 mb-6">
-                <img src="{{ url_for('static', filename='images/' + shoe.image_url) }}" alt="Shoe Image"
-                    style="max-width: 200px;">
-                <div class="text-center">
-                    <p><strong>Name:</strong> {{ shoe.name }}</p>
-                    <p><strong>Description:</strong> {{ shoe.description }}</p>
-                    <p class="price"><strong>Price:</strong> €{{ shoe.price }}</p>
+                <img src="{{ url_for('static', filename='images/' + shoe.image_url) }}" alt="Shoe Image">
+                <p class="jersey-20-regular"><strong></strong> {{ shoe.name }}</p>
+                <div class="card-text">
+                    <p class="description-text"><strong>Description:</strong> {{ shoe.description }}</p>
+                    <p class="price-text"><strong>Price:</strong> {{ shoe.price }}</p>
+                </div>
+                <div class="button-container">
                     <form action="{{ url_for('delete_shoe') }}" method="post" style="display:inline;">
                         <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
                         <button type="submit"

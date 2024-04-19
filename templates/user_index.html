@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Page</title>
-    <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         /* Overall body styling */
@@ -120,6 +119,61 @@
         }
 
         /* Review form styling */
+        /* Review section styling */
+        .reviews {
+            background-color: #f7f7f7;
+            border-top: 2px solid #fb7e21;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        .review {
+            display: flex;
+            justify-content: space-between;
+            /* Aligns children (text and name) on opposite ends */
+            align-items: center;
+            /* Centers items vertically */
+            padding: 8px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .review:last-child {
+            border-bottom: none;
+        }
+
+        .review-content {
+            width: 80%;
+            /* Allocate majority width to review content */
+        }
+
+        .review-author {
+            width: 20%;
+            /* Allocate remaining width to author */
+            text-align: right;
+            /* Align author's name to the right */
+            font-size: 1em;
+            /* Increase font size */
+            color: #666;
+            font-weight: bold;
+            /* Make text bold if desired */
+        }
+
+
+
+        .review p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .review small {
+            display: block;
+            margin-top: 5px;
+            font-size: 0.8em;
+            color: #666;
+        }
+
+
         .review-form {
             padding: 16px;
             background-color: #f7f7f7;
@@ -149,7 +203,6 @@
             /* Restrict width of the rating input */
         }
     </style>
-
 </head>
 
 <body>
@@ -157,14 +210,12 @@
         <a href="{{ url_for('home') }}">
             <img src="{{ url_for('static', filename='icon/logo.png') }}" alt="Logo" style="height: 50px;">
         </a>
-
         <div class="search-box">
             <form action="{{ url_for('search') }}" method="get">
                 <input type="text" name="query" placeholder="Search for shoes..." required>
                 <button type="submit">Search</button>
             </form>
         </div>
-
         <div class="icons-container">
             <a href="{{ url_for('view_cart') }}">
                 <img src="{{ url_for('static', filename='icon/cart.png') }}" alt="Cart" style="height: 40px;">
@@ -179,7 +230,6 @@
         Welcome {{ user_name }} to Your User Dashboard!
     </div>
 
-    <!-- Product listing -->
     {% for shoe in shoes %}
     <div class="card p-4 mb-6">
         <img src="{{ url_for('static', filename='images/' + shoe.image_url) }}" alt="{{ shoe.name }}"
@@ -193,7 +243,6 @@
                 <button type="submit" class="button-add">Add to Cart</button>
             </form>
         </div>
-        {% if 'user' in session %}
         <div class="review-form">
             <form action="{{ url_for('add_review') }}" method="post">
                 <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
@@ -203,9 +252,27 @@
                 </div>
             </form>
         </div>
+        <!-- New section to display reviews -->
+        {% if reviews.get(shoe.id) %}
+        <div class="reviews">
+            {% for review in reviews.get(shoe.id) %}
+            <div class="review">
+                <div class="review-content">
+                    <p>{{ review.review_text }}</p>
+                </div>
+                <div class="review-author">
+                    <small>Reviewed by {{ review.username }}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
         {% endif %}
     </div>
     {% endfor %}
+
+
+
+
 
     <div class="text-center mt-6">
         <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
