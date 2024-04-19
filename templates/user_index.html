@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Page</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+20&family=Titillium+Web&display=swap" rel="stylesheet">
+
     <style>
         /* Overall body styling */
         body {
@@ -36,7 +38,6 @@
             /* Move icons container more to the left */
         }
 
-
         /* Search box styling */
         .search-box {
             display: inline-flex;
@@ -62,8 +63,6 @@
         .search-box button:hover {
             background-color: #fb7e21;
         }
-
-
 
         /* Welcome message */
         .welcome-message {
@@ -100,9 +99,23 @@
             background-color: #fb7e21;
         }
 
-        /* Text styling for description and price */
+        /* Text styling for name, description, and price */
+        .card h3 {
+            /* For shoe name */
+            font-family: 'Jersey 20', sans-serif;
+            font-size: 36px;
+            /* Adjust as needed */
+        }
+
         .description,
-        .price {
+        /* For description */
+        .price,
+        /* For price */
+        .review-content p,
+        /* For review text */
+        .review-author small {
+            /* For review author */
+            font-family: 'Titillium Web', sans-serif;
             text-align: left;
             margin-top: 10px;
         }
@@ -118,7 +131,6 @@
             color: #000;
         }
 
-        /* Review form styling */
         /* Review section styling */
         .reviews {
             background-color: #f7f7f7;
@@ -159,21 +171,6 @@
             /* Make text bold if desired */
         }
 
-
-
-        .review p {
-            margin: 0;
-            padding: 0;
-        }
-
-        .review small {
-            display: block;
-            margin-top: 5px;
-            font-size: 0.8em;
-            color: #666;
-        }
-
-
         .review-form {
             padding: 16px;
             background-color: #f7f7f7;
@@ -182,12 +179,6 @@
             flex-direction: column;
             gap: 10px;
             margin-top: 20px;
-        }
-
-        .review-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
         .review-textarea,
@@ -235,7 +226,7 @@
         <img src="{{ url_for('static', filename='images/' + shoe.image_url) }}" alt="{{ shoe.name }}"
             class="block mx-auto" style="max-width: 200px;">
         <div class="text-center">
-            <h3 class="text-lg font-medium my-2">{{ shoe.name }}</h3>
+            <h3>{{ shoe.name }}</h3>
             <p class="description">{{ shoe.description }}</p>
             <p class="price"><strong>Price:</strong> {{ shoe.price }}</p>
             <form action="{{ url_for('add_to_cart') }}" method="post">
@@ -252,7 +243,6 @@
                 </div>
             </form>
         </div>
-        <!-- New section to display reviews -->
         {% if reviews.get(shoe.id) %}
         <div class="reviews">
             {% for review in reviews.get(shoe.id) %}
@@ -269,10 +259,6 @@
         {% endif %}
     </div>
     {% endfor %}
-
-
-
-
 
     <div class="text-center mt-6">
         <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
