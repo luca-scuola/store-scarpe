@@ -161,8 +161,9 @@ def user_index():
             ''', (shoe['id'],)).fetchall()
             reviews[shoe['id']] = shoe_reviews
         db.close()
-        return render_template('user_index.html', shoes=shoes, reviews=reviews)
+        return render_template('user_index.html', shoes=shoes, reviews=reviews, user_name=session.get('user', 'Guest'))
     return redirect(url_for('login'))
+
 
 
 @app.route('/edit_shoe/<int:shoe_id>', methods=['GET'])
@@ -221,15 +222,38 @@ def view_cart():
 
     user_id = session['user_id']
     db = get_db_connection()
-    # Modifica la query per recuperare le informazioni della scarpa direttamente
     cart_items = db.execute('''
-        SELECT shoes.*, cart.id AS cart_id FROM cart
-        JOIN shoes ON cart.shoe_id = shoes.id
-        WHERE cart.user_id = ?
+        SELECT s.*, c.id AS cart_id, r.review_text, r.user_id AS reviewer_id, u.username AS reviewer_name
+        FROM cart c
+        JOIN shoes s ON c.shoe_id = s.id
+        LEFT JOIN reviews r ON s.id = r.shoe_id
+        JOIN users u ON r.user_id = u.id
+        WHERE c.user_id = ?
     ''', (user_id,)).fetchall()
     db.close()
+    
+    # Reorganize data to include reviews
+    organized_items = {}
+    for item in cart_items:
+        if item['id'] in organized_items:
+            organized_items[item['id']]['reviews'].append({
+                'text': item['review_text'],
+                'username': item['reviewer_name']
+            })
+        else:
+            organized_items[item['id']] = {
+                'name': item['name'],
+                'description': item['description'],
+                'price': item['price'],
+                'image_url': item['image_url'],
+                'reviews': [{
+                    'text': item['review_text'],
+                    'username': item['reviewer_name']
+                }] if item['review_text'] else []
+            }
+    
+    return render_template('cart.html', cart_items=list(organized_items.values()))
 
-    return render_template('cart.html', cart_items=cart_items)
 
 
 @app.route('/search')
@@ -250,6 +274,9 @@ def search():
         return render_template('user_index.html', shoes=results, reviews=reviews, user_name=session.get('user', 'Guest'))
     else:
         return redirect(url_for('user_index'))
+    
+
+
 
 
 

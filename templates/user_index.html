@@ -19,11 +19,11 @@
         .header {
             background-color: #fb7e21;
             color: #000;
-            padding: 2rem 0;
+            padding: 1rem 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-left: 3rem;
+            padding-left: 2rem;
             /* Increase left padding to push logo to the right */
             padding-right: 1rem;
             /* Ensure symmetry */
@@ -31,7 +31,7 @@
 
         .icons-container {
             display: flex;
-            align-items: center;
+            /* align-items: center; */
             gap: 40px;
             /* Increase the gap between icons */
             margin-left: 0;
@@ -190,7 +190,7 @@
         }
 
         .review-rating {
-            width: 150px;
+            width: 100px;
             /* Restrict width of the rating input */
         }
     </style>
@@ -198,16 +198,25 @@
 
 <body>
     <div class="header">
-        <a href="{{ url_for('home') }}">
+
+        <div class="flex items-center space-x-10">
+
+            <a href="{{ url_for('home') }}">
+                <img src="/static/icon/logo.png" alt="Logo" class="mr-4">
+            </a>
+        </div>
+
+        <!-- <a href="{{ url_for('home') }}">
             <img src="{{ url_for('static', filename='icon/logo.png') }}" alt="Logo" style="height: 50px;">
-        </a>
+        </a> -->
         <div class="search-box">
             <form action="{{ url_for('search') }}" method="get">
                 <input type="text" name="query" placeholder="Search for shoes..." required>
                 <button type="submit">Search</button>
             </form>
         </div>
-        <div class="icons-container">
+
+        <div class="flex space-x-10">
             <a href="{{ url_for('view_cart') }}">
                 <img src="{{ url_for('static', filename='icon/cart.png') }}" alt="Cart" style="height: 40px;">
             </a>
@@ -215,11 +224,21 @@
                 <img src="{{ url_for('static', filename='icon/logout.png') }}" alt="Logout" style="height: 40px;">
             </a>
         </div>
+
+        <!-- <div class="icons-container">
+            <a href="{{ url_for('view_cart') }}">
+                <img src="{{ url_for('static', filename='icon/cart.png') }}" alt="Cart" style="height: 40px;">
+            </a>
+            <a href="{{ url_for('logout') }}">
+                <img src="{{ url_for('static', filename='icon/logout.png') }}" alt="Logout" style="height: 40px;">
+            </a>
+        </div> -->
     </div>
 
     <div class="welcome-message">
         Welcome {{ user_name }} to Your User Dashboard!
     </div>
+
 
     {% for shoe in shoes %}
     <div class="card p-4 mb-6">
