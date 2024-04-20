@@ -94,6 +94,26 @@
             margin-top: 20px;
             font-weight: bold;
         }
+
+        button {
+            display: block;
+            margin: 20px auto;
+            /* Centra il pulsante */
+            background-color: #fb7e21;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 18px;
+            transition: background-color 0.3s;
+            /* Aggiungi transizione per l'hover */
+        }
+
+        button:hover {
+            background-color: black;
+            /* Cambia colore al passaggio del mouse */
+        }
     </style>
 </head>
 
@@ -119,7 +139,7 @@
             <img src="{{ url_for('static', filename='images/' + item.image_url) }}" alt="{{ item.name }}">
             <h3>{{ item.name }}</h3>
             <p class="text-description">{{ item.description }}</p>
-            <p class="text-price">€{{ item.price }}</p>
+            <p class="text-price"><strong>Price:</strong>{{ item.price }}</p>
             <div class="reviews">
                 {% if item.reviews %}
                 {% for review in item.reviews %}
@@ -132,6 +152,10 @@
                 <p class="review-author">No reviews yet.</p>
                 {% endif %}
             </div>
+            <form action="{{ url_for('remove_from_cart', shoe_id=item.id ) }}" method="post">
+                <input type="hidden" name="shoe_id" value="{{ item.id }}">
+                <button type="submit">Remove from Cart</button>
+            </form>
         </div>
         {% endfor %}
     </div>

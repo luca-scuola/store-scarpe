@@ -243,7 +243,7 @@ def view_cart():
         WHERE c.user_id = ?
     ''', (user_id,)).fetchall()
     db.close()
-    
+
     # Reorganize data to include reviews
     organized_items = {}
     for item in cart_items:
@@ -258,6 +258,7 @@ def view_cart():
                 'description': item['description'],
                 'price': item['price'],
                 'image_url': item['image_url'],
+                'id': item['id'],
                 'reviews': [{
                     'text': item['review_text'],
                     'username': item['reviewer_name']
@@ -287,6 +288,7 @@ def search():
     else:
         return redirect(url_for('user_index'))
     
+
 @app.route('/delete_review', methods=['POST'])
 def delete_review():
     if 'user' in session and session['role'] == 'admin':
@@ -307,6 +309,37 @@ def delete_review():
     else:
         flash('Unauthorized access.')
     return redirect(url_for('login'))
+
+
+@app.route('/remove_from_cart', methods=['POST'])
+def remove_from_cart():
+    if 'user' not in session:
+        flash('You need to login to manage the cart.')
+        return redirect(url_for('login'))
+
+    shoe_id = request.form['shoe_id']
+    user_id = session['user_id']
+
+    print("S_ID:", shoe_id,"USER:", user_id)
+    try:
+        db = get_db_connection()
+        result = db.execute('DELETE FROM cart WHERE user_id = ? AND shoe_id = ?', (user_id, shoe_id))
+        db.commit()
+        if result.rowcount == 0:
+            flash('No item was removed. Check if the item ID is correct and belongs to the user.')
+        else:
+            flash('Shoe removed from cart successfully.')
+    except Exception as e:
+        db.rollback()
+        flash(f'An error occurred: {str(e)}')
+    finally:
+        db.close()
+
+    return redirect(url_for('view_cart'))
+
+
+
+
 
 
 
