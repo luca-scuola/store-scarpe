@@ -83,7 +83,6 @@
 
         .logo-image,
         .login-image {
-            /* Prevent these images from being affected by the img style above */
             max-width: none;
             margin: 0;
         }
@@ -98,7 +97,6 @@
         button {
             display: block;
             margin: 20px auto;
-            /* Centra il pulsante */
             background-color: #fb7e21;
             color: #fff;
             border: none;
@@ -107,18 +105,15 @@
             border-radius: 5px;
             font-size: 18px;
             transition: background-color 0.3s;
-            /* Aggiungi transizione per l'hover */
         }
 
         button:hover {
             background-color: black;
-            /* Cambia colore al passaggio del mouse */
         }
     </style>
 </head>
 
 <body>
-    <!-- Header -->
     <div class="header">
         <a href="{{ url_for('home') }}">
             <img src="{{ url_for('static', filename='icon/logo.png') }}" alt="Logo" class="logo-image">
@@ -128,7 +123,6 @@
         </a>
     </div>
 
-    <!-- Cart Message -->
     <div class="cart-message">
         Your Shopping Cart
     </div>

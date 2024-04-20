@@ -4,71 +4,54 @@
 
 {% block content %}
 <style>
-    /* Stili generali per il form di login */
     .login-container {
         max-width: 400px;
-        /* Limita la larghezza del form */
+        /* Centro il form orizzontalmente e aggiunge margine superiore */
         margin: 100px auto 0;
-        /* Centra il form orizzontalmente e aggiunge margine superiore */
-        padding: 2rem;
         /* Spazio interno */
+        padding: 2rem;
         background-color: #f9f9fa;
-        /* Colore di sfondo chiaro */
         border-radius: 8px;
-        /* Bordi arrotondati */
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         /* Ombra per profondità */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .login-title {
         text-align: center;
-        /* Centra il titolo nel form */
         color: black;
-        /* Colore scuro per il titolo */
     }
 
     .form-label {
-        margin-bottom: 0.5rem;
         /* Spazio sotto la label */
+        margin-bottom: 0.5rem;
         color: black;
-        /* Colore uniforme delle label */
     }
 
     .form-input {
         padding: 0.75rem 1rem;
-        /* Padding confortevole */
         border: 2px solid #cbd5e0;
-        /* Bordo solido */
         border-radius: 0.375rem;
-        /* Bordi arrotondati degli input */
-        transition: border-color 0.3s ease-in-out;
         /* Transizione fluida per il focus/hover */
+        transition: border-color 0.3s ease-in-out;
     }
 
     .form-input:focus,
     .form-input:hover {
         border-color: #fb7e21;
-        /* Colore del bordo al focus/hover */
     }
 
     .login-button {
         width: 100%;
-        /* Larghezza piena per il pulsante */
         background-color: black;
-        /* Colore di base per il pulsante */
         color: #ffffff;
-        /* Testo bianco per contrasto */
         padding: 0.75rem;
-        /* Padding adeguato */
         border-radius: 0.375rem;
-        /* Bordi arrotondati del pulsante */
+        /* Transizione del colore alll' hover */
         transition: background-color 0.3s;
-        /* Transizione del colore al hover */
     }
 
     .login-button:hover {
         background-color: #fb7e21;
-        /* Colore arancione al hover */
     }
 </style>
 

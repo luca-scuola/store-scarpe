@@ -3,9 +3,7 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<!-- Existing content and styles from your initial code -->
 <style>
-    /* Stili principali delle slide */
     .slide {
         width: 300px;
         margin-right: 20px;
@@ -14,14 +12,10 @@
         justify-content: space-between;
         height: 400px;
         background-color: #fff;
-        /* Bianco per lo sfondo delle slide */
         color: #333;
-        /* Grigio scuro per il testo */
         transition: transform 0.3s ease-in-out;
         border: 1px solid #fb7e21;
-        /* Bordo arancione */
         border-radius: 8px;
-        /* Bordi arrotondati */
     }
 
     #slides-container {
@@ -35,7 +29,6 @@
     .slide h2 {
         margin-bottom: 0.5rem;
         color: #333;
-        /* Grigio scuro per i titoli */
     }
 
     .slide img {
@@ -53,31 +46,25 @@
         display: none;
     }
 
-    /* Aumentare il margine inferiore del contenitore delle slide */
+
     .overflow-hidden {
-        margin-bottom: 50px;
         /* Spazio aggiunto tra le slide e le features */
+        margin-bottom: 50px;
     }
 
-    /* Sezione delle feature */
-    /* Sezione delle feature */
     .feature-section {
         padding-top: 2rem;
         padding-bottom: 2rem;
     }
 
-    /* Additional margin for spacing between features and footer */
     .feature-section {
         margin-bottom: 200px;
-        /* Adjust this value as needed for more space */
     }
 
     .feature-item {
         padding: 20px;
         background-color: #fff;
-        /* Bianco per lo sfondo degli elementi */
         border: 2px solid #eee;
-        /* Bordo chiaro per separare gli elementi */
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
         transition: transform 0.3s ease-in-out;
@@ -86,7 +73,6 @@
     .feature-item:hover {
         transform: translateY(-5px);
         border-color: #fb7e21;
-        /* Arancione per il bordo al hover */
     }
 
     .feature-item img {
@@ -96,27 +82,23 @@
     .feature-item h3 {
         font-size: 1.25rem;
         color: #333;
-        /* Grigio scuro per i titoli */
         margin-bottom: 8px;
     }
 
     .feature-item p {
         font-size: 1rem;
         color: #666;
-        /* Grigio per il testo */
         line-height: 1.5;
     }
 
     .text-brand-color {
         color: #fb7e21;
-        /* Arancione per i link */
     }
 
     .hover\:underline:hover {
         text-decoration: underline;
     }
 
-    /* Footer specific styles */
     .footer-links li {
         margin-bottom: 0.5rem;
     }
@@ -148,25 +130,15 @@
 
     #subscription-message {
         display: none;
-        /* Hidden by default */
         background-color: #90ee90;
-        /* Light green background */
         color: black;
-        /* Black text color */
         text-align: center;
-        /* Centered text */
         padding: 0.5rem 1rem;
-        /* Some padding */
         border-radius: 0.5rem;
-        /* Rounded corners */
         margin-top: 1rem;
-        /* Space above the message */
         width: fit-content;
-        /* Only as wide as necessary */
         margin-left: auto;
-        /* Center in the parent */
         margin-right: auto;
-        /* Center in the parent */
     }
 </style>
 
@@ -187,7 +159,6 @@
     </div>
 </div>
 
-<!-- Feature section starts here -->
 <div class="feature-section">
     <div class="container mx-auto px-6">
         <div class="grid grid-cols-3 gap-8">
@@ -198,7 +169,6 @@
                     experts.</p>
             </div>
 
-            <!-- Feature 2 -->
             <div class="feature-item flex flex-col items-center justify-center p-4">
                 <img src="{{ url_for('static', filename='icon/dollar-tag.png') }}" alt="Transparent Pricing Icon"
                     class="mx-auto">
@@ -207,7 +177,6 @@
                     sought-after items at true market prices.</p>
             </div>
 
-            <!-- Feature 3 -->
             <div class="feature-item flex flex-col items-center justify-center p-4">
                 <img src="{{ url_for('static', filename='icon/access-control.png') }}" alt="Global Access Icon"
                     class="mx-auto">
@@ -216,7 +185,6 @@
                     200 countries ensures you'll find the item you are looking for.</p>
             </div>
 
-            <!-- Feature 4 -->
             <div class="feature-item flex flex-col items-center justify-center p-4">
                 <img src="{{ url_for('static', filename='icon/paper-bag.png') }}" alt="No Worries Icon" class="mx-auto">
                 <h3 class="font-semibold mt-4">No Worries Shopping</h3>
@@ -224,7 +192,6 @@
                     deal with sellers. We handle all steps to ensure a simple and secure purchasing process.</p>
             </div>
 
-            <!-- Feature 5 -->
             <div class="feature-item flex flex-col items-center justify-center p-4">
                 <img src="{{ url_for('static', filename='icon/security.png') }}" alt="Security Icon" class="mx-auto">
                 <h3 class="font-semibold mt-4">Secured Transactions</h3>
@@ -232,7 +199,6 @@
                     prevention measures, partnering with the best in the world to keep your information safe 24/7.</p>
             </div>
 
-            <!-- Feature 6 -->
             <div class="feature-item flex flex-col items-center justify-center p-4">
                 <img src="{{ url_for('static', filename='icon/mobile.png') }}" alt="Customer Support Icon"
                     class="mx-auto">
@@ -243,27 +209,36 @@
         </div>
     </div>
 </div>
-<!-- Feature section ends here -->
+
 
 <script>
+    // Aggiungo un listener per l'evento DOMContentLoaded.
     window.addEventListener('DOMContentLoaded', (event) => {
+        // Ottengo il riferimento al contenitore degli slider dal documento HTML utilizzando l'ID 'slides-container'.
         const slidesContainer = document.getElementById('slides-container');
+        // Variabile per tenere traccia dell'indice corrente dello slider.
         let currentIndex = 0;
+        // Variabile per tenere traccia dell'intervallo di tempo tra il cambio di slide.
         let interval = null;
 
+        // Per ogni elemento con classe 'slide' nel documento HTML, clono l'elemento e lo aggiunge al contenitore degli slider.
         document.querySelectorAll('.slide').forEach((slide, index) => {
             const cloneSlide = slide.cloneNode(true);
+            // Imposto il margine destro della slide clonata a 0 se è l'ultima slide.
             if (index === document.querySelectorAll('.slide').length - 1) {
                 cloneSlide.style.marginRight = '0px';
             }
             slidesContainer.appendChild(cloneSlide);
         });
 
+        // Definiso le dimensioni di ciascuna slide e il margine tra di esse.
         const slideWidth = 300;
         const slideMargin = 20;
 
+        // Funzione per ciclare tra le slide.
         function cycleSlides() {
             currentIndex++;
+            // Se si arriva alla fine delle slide, reimposto l'indice corrente a 0 e riposiziono il contenitore delle slide.
             if (currentIndex > document.querySelectorAll('.slide').length / 2 - 1) {
                 currentIndex = 0;
                 slidesContainer.style.transition = 'none';
@@ -275,30 +250,36 @@
                     slidesContainer.style.transform = `translateX(-${currentIndex * (slideWidth + slideMargin)}px)`;
                 }, 10);
             } else {
+                // Altrimenti, sposto il contenitore delle slide all'indice corrente.
                 slidesContainer.style.transition = 'transform 0.3s ease-out';
                 slidesContainer.style.transform = `translateX(-${currentIndex * (slideWidth + slideMargin)}px)`;
             }
         }
 
+        // Avvio l'intervallo per ciclare tra le slide ogni 2 secondi.
         interval = setInterval(cycleSlides, 2000);
 
+        // Aggiungo un listener per l'evento 'beforeunload', che si verifica quando la finestra sta per essere scaricata.
         window.addEventListener('beforeunload', () => {
+            // Se l'intervallo è stato avviato, lo cancello per evitare che continui ad eseguire cicli dopo che la pagina è stata scaricata.
             if (interval) {
                 clearInterval(interval);
             }
         });
 
+        // Aggiungo un listener per l'evento di invio del modulo per la sottoscrizione.
         document.getElementById('subscribe-form').addEventListener('submit', function (event) {
-            event.preventDefault(); // Stop the actual form submission
-
-            // Show the subscription message
+            // Impedisco il comportamento predefinito di invio del modulo.
+            event.preventDefault();
+            // Ottengo il riferimento al messaggio di sottoscrizione.
             var messageBox = document.getElementById('subscription-message');
-            messageBox.style.display = 'block'; // Make the message box visible
-
-            // Optionally, hide the form
+            // Mostro il messaggio di sottoscrizione.
+            messageBox.style.display = 'block';
+            // Nascondo il modulo di sottoscrizione.
             document.getElementById('subscribe-form').style.display = 'none';
         });
     });
+
 </script>
 
 {% endblock %}
@@ -313,7 +294,6 @@
                     <li>Air Jordan 4</li>
                     <li>Air Jordan 1</li>
                     <li>Nike Dunk</li>
-                    <li>UGG</li>
                     <li>Yeezy</li>
                     <li>Yeezy 350</li>
                     <li>Yeezy Slides</li>
@@ -377,7 +357,6 @@
                     <button type="submit"
                         class="px-6 py-2 bg-brand-color text-white font-semibold rounded-md hover:bg-brand-color-light">Subscribe</button>
                 </form>
-                <!-- Subscription message -->
                 <div id="subscription-message"
                     style="display: none; background-color: #90ee90; color: black; text-align: center; padding: 0.5rem 1rem; border-radius: 0.5rem; margin-top: 1rem; width: fit-content; margin-left: auto; margin-right: auto;">
                     Thanks for subscribing!

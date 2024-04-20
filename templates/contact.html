@@ -30,10 +30,15 @@
 </div>
 
 <script>
+    // Aggiungo un listener per l'evento di invio del modulo per il contatto.
     document.getElementById('contact-form').addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevent the default form submission
-        document.getElementById('contact-form').style.display = 'none'; // Hide the form
-        document.getElementById('thank-you-message').style.display = 'block'; // Show the thank you message
+        // Impedisco l'invio predefinito del modulo
+        event.preventDefault();
+        // Nascondo il modulo
+        document.getElementById('contact-form').style.display = 'none';
+        // Mostro il messaggio di ringraziamento
+        document.getElementById('thank-you-message').style.display = 'block';
     });
+
 </script>
 {% endblock %}

@@ -9,13 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Jersey+20&family=Titillium+Web&display=swap" rel="stylesheet">
 
     <style>
-        /* Overall body styling */
         body {
             background-color: #fff;
             font-family: 'Arial', sans-serif;
         }
 
-        /* Header styling */
         .header {
             background-color: #fb7e21;
             color: #000;
@@ -23,22 +21,20 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            /* Aumento il padding sinistro per spingere il logo a destra */
             padding-left: 2rem;
-            /* Increase left padding to push logo to the right */
+            /* Per gestire la simmetria */
             padding-right: 1rem;
-            /* Ensure symmetry */
         }
 
         .icons-container {
             display: flex;
-            /* align-items: center; */
+            /* Aumento lo spazio tra le icone */
             gap: 40px;
-            /* Increase the gap between icons */
+            /* Sposto il contenitore delle icone più a sinistra */
             margin-left: 0;
-            /* Move icons container more to the left */
         }
 
-        /* Search box styling */
         .search-box {
             display: inline-flex;
             align-items: center;
@@ -64,7 +60,6 @@
             background-color: #fb7e21;
         }
 
-        /* Welcome message */
         .welcome-message {
             text-align: center;
             font-size: 24px;
@@ -72,7 +67,6 @@
             font-weight: bold;
         }
 
-        /* Card styling for products */
         .card {
             background-color: #fff;
             border: 2px solid #fb7e21;
@@ -82,7 +76,6 @@
             padding: 20px;
         }
 
-        /* Styling for buttons */
         .button-add,
         .button-review {
             background-color: #000;
@@ -99,28 +92,24 @@
             background-color: #fb7e21;
         }
 
-        /* Text styling for name, description, and price */
+        /* Stile del testo per nome, descrizione e prezzo */
         .card h3 {
-            /* For shoe name */
+            /* Per il nome della scarpa */
             font-family: 'Jersey 20', sans-serif;
             font-size: 36px;
-            /* Adjust as needed */
         }
 
         .description,
-        /* For description */
         .price,
-        /* For price */
+        /* Per il testo della recensione */
         .review-content p,
-        /* For review text */
+        /* Per l'autore della recensione */
         .review-author small {
-            /* For review author */
             font-family: 'Titillium Web', sans-serif;
             text-align: left;
             margin-top: 10px;
         }
 
-        /* Logout link styling */
         .logout-link {
             color: #fb7e21;
             text-decoration: none;
@@ -131,7 +120,6 @@
             color: #000;
         }
 
-        /* Review section styling */
         .reviews {
             background-color: #f7f7f7;
             border-top: 2px solid #fb7e21;
@@ -141,10 +129,10 @@
 
         .review {
             display: flex;
+            /* Allineo i figli (testo e nome) su estremi opposti */
             justify-content: space-between;
-            /* Aligns children (text and name) on opposite ends */
+            /* Centro verticalmente gli elementi */
             align-items: center;
-            /* Centers items vertically */
             padding: 8px;
             margin-bottom: 10px;
             border-bottom: 1px solid #ddd;
@@ -155,20 +143,18 @@
         }
 
         .review-content {
+            /* Assegno la maggior parte della larghezza al contenuto della recensione */
             width: 80%;
-            /* Allocate majority width to review content */
         }
 
         .review-author {
+            /* Assegno la larghezza restante all'autore */
             width: 20%;
-            /* Allocate remaining width to author */
+            /* Allineo il nome dell'autore a destra */
             text-align: right;
-            /* Align author's name to the right */
             font-size: 1em;
-            /* Increase font size */
             color: #666;
             font-weight: bold;
-            /* Make text bold if desired */
         }
 
         .review-form {
@@ -191,7 +177,6 @@
 
         .review-rating {
             width: 100px;
-            /* Restrict width of the rating input */
         }
     </style>
 </head>
@@ -207,14 +192,14 @@
         </div>
         <div class="search-box">
             <form action="{{ url_for('search') }}" method="get">
-                <input type="text" name="query" placeholder="Search for shoes..." required>
-                <button type="submit">Search</button>
+                <input type="text" name="query" placeholder="Cerca scarpe..." required>
+                <button type="submit">Cerca</button>
             </form>
         </div>
 
         <div class="flex space-x-10">
             <a href="{{ url_for('view_cart') }}">
-                <img src="{{ url_for('static', filename='icon/cart.png') }}" alt="Cart" style="height: 40px;">
+                <img src="{{ url_for('static', filename='icon/cart.png') }}" alt="Carrello" style="height: 40px;">
             </a>
             <a href="{{ url_for('logout') }}">
                 <img src="{{ url_for('static', filename='icon/logout.png') }}" alt="Logout" style="height: 40px;">
@@ -223,7 +208,7 @@
     </div>
 
     <div class="welcome-message">
-        Welcome {{ user_name }} to Your User Dashboard!
+        Benvenuto {{ user_name }} nella tua Dashboard Utente!
     </div>
 
 
@@ -234,18 +219,19 @@
         <div class="text-center">
             <h3>{{ shoe.name }}</h3>
             <p class="description">{{ shoe.description }}</p>
-            <p class="price"><strong>Price:</strong> {{ shoe.price }}</p>
+            <p class="price"><strong>Prezzo:</strong> {{ shoe.price }}</p>
             <form action="{{ url_for('add_to_cart') }}" method="post">
                 <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
-                <button type="submit" class="button-add">Add to Cart</button>
+                <button type="submit" class="button-add">Aggiungi al carrello</button>
             </form>
         </div>
         <div class="review-form">
             <form action="{{ url_for('add_review') }}" method="post">
                 <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
-                <textarea name="review_text" class="review-textarea" placeholder="Leave a review" required></textarea>
+                <textarea name="review_text" class="review-textarea" placeholder="Lascia una recensione"
+                    required></textarea>
                 <div class="text-center">
-                    <button type="submit" class="button-review">Submit Review</button>
+                    <button type="submit" class="button-review">Invia recensione</button>
                 </div>
             </form>
         </div>
@@ -257,7 +243,7 @@
                     <p>{{ review.review_text }}</p>
                 </div>
                 <div class="review-author">
-                    <small>Reviewed by {{ review.username }}</small>
+                    <small>Recensito da {{ review.username }}</small>
                 </div>
             </div>
             {% endfor %}
