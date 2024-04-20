@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
+<div class="container mx-auto mt-20">
+    <h1 class="text-4xl font-bold mb-6 text-center">Contact Details</h1>
+    <form id="contact-form" action="javascript:void(0);" method="POST" class="max-w-lg mx-auto">
+        <div class="mb-4">
+            <label for="name" class="block text-sm font-medium mb-1">Nome</label>
+            <input type="text" id="name" name="name" required class="w-full border-2 p-2">
+        </div>
+        <div class="mb-4">
+            <label for="email" class="block text-sm font-medium mb-1">Indirizzo email</label>
+            <input type="email" id="email" name="email" required class="w-full border-2 p-2">
+        </div>
+        <div class="mb-4">
+            <label for="phone" class="block text-sm font-medium mb-1">Numero di telefono</label>
+            <input type="tel" id="phone" name="phone" required class="w-full border-2 p-2">
+        </div>
+        <div class="mb-4">
+            <label for="comment" class="block text-sm font-medium mb-1">Commenta</label>
+            <textarea id="comment" name="comment" rows="4" required class="w-full border-2 p-2"></textarea>
+        </div>
+        <button type="submit" class="w-full bg-black text-white p-2">INVIA</button>
+    </form>
+    <div id="thank-you-message" class="text-center hidden mt-4">
+        <p>Thanks for the request!</p>
+    </div>
+</div>
+
+<script>
+    document.getElementById('contact-form').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the default form submission
+        document.getElementById('contact-form').style.display = 'none'; // Hide the form
+        document.getElementById('thank-you-message').style.display = 'block'; // Show the thank you message
+    });
+</script>
+{% endblock %}

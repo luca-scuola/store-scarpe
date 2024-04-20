@@ -205,10 +205,6 @@
                 <img src="/static/icon/logo.png" alt="Logo" class="mr-4">
             </a>
         </div>
-
-        <!-- <a href="{{ url_for('home') }}">
-            <img src="{{ url_for('static', filename='icon/logo.png') }}" alt="Logo" style="height: 50px;">
-        </a> -->
         <div class="search-box">
             <form action="{{ url_for('search') }}" method="get">
                 <input type="text" name="query" placeholder="Search for shoes..." required>
@@ -224,15 +220,6 @@
                 <img src="{{ url_for('static', filename='icon/logout.png') }}" alt="Logout" style="height: 40px;">
             </a>
         </div>
-
-        <!-- <div class="icons-container">
-            <a href="{{ url_for('view_cart') }}">
-                <img src="{{ url_for('static', filename='icon/cart.png') }}" alt="Cart" style="height: 40px;">
-            </a>
-            <a href="{{ url_for('logout') }}">
-                <img src="{{ url_for('static', filename='icon/logout.png') }}" alt="Logout" style="height: 40px;">
-            </a>
-        </div> -->
     </div>
 
     <div class="welcome-message">

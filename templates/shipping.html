@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="shopify-policy__container">
+    <div class="shopify-policy__title">
+        <h1>Shipping policy</h1>
+    </div>
+
+    <div class="shopify-policy__body">
+        <div class="rte">
+            <p><span style="font-weight:400;">Please note that goods are only shipped Monday-Friday, excluding bank
+                    holidays. Shipping times begin when you receive the shipping confirmation email.<br></span>
+                <br><span style="font-weight:400;">Please note that once your order is confirmed, we are unable to amend
+                    the delivery address or method, or any details within your order, such as product, number of
+                    products, size, colour.<br></span> <br>If you are not home to receive the delivery, our courier will
+                deliver your parcel to your nearby neighbour or return the item back to our warehouse. If the parcel
+                becomes RTS, please kindly reach out to our customer support to advise whether you would like the order
+                to be re-dispatched or refunded.<br><span style="font-weight:400;"><br>We cannot deliver to certain
+                    addresses such as student/campus accommodation, hotels, restaurants, stores, or forwarding
+                    addresses.</span> <br><span style="font-weight:400;"><br>Most of our international orders are
+                    shipped on a DDP (Delivery Duties Paid) basis. This means that taxes and duties will be added at the
+                    checkout accordingly, and the cost of this depends on the country you are based.</span> <br><span
+                    style="font-weight:400;"><br>The following countries are shipped to with Delivery Duties
+                    Paid:</span> <br><span style="font-weight:400;"><br>Australia, Bahrain, Bosnia &amp; Herzegovina,
+                    Canada, China, Hong Kong SAR China, Iceland, India, Indonesia, Isle of Man, Israel, Japan, Kuwait,
+                    Malaysia, Mexico, New Zealand, Norway, Philippines, Qatar, Saudi Arabia, Serbia, Singapore, South
+                    Africa, South Korea, Switzerland, Taiwan, Thailand, Turkey, United Arab Emirates, United States,
+                    Vietnam.</span> <br><span style="font-weight:400;"><br>Any other country or region outside the above
+                    list is subject to pay taxes &amp; duties set by their country upon delivery.</span> <br><span
+                    style="font-weight:400;">Please note, these fees are the sole responsibility of the customer and are
+                    non-refundable, even if you return your order.</span>
+            </p>
+            <p><strong>Click and Collect</strong></p>
+            <p>If you are local to one of our <strong><a title="Kick Game store locations"
+                        href="https://www.kickgame.co.uk/pages/locations">stores</a></strong>, you are welcome to place
+                an order for collection. To do this, please select the ‘Pick Up’ delivery method when checking out.</p>
+            <p>To collect your order from a store, you will be required to show:</p>
+            <p>Confirmation email, official photo ID (passport or driving licence) and payment card used for the
+                order.<br></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block additional_styles %}
+<style>
+    .shopify-policy__body {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .privacy-policy p {
+        margin-bottom: 1rem;
+    }
+
+    .privacy-policy a {
+        text-decoration: none;
+        color: #3182ce;
+    }
+
+    .privacy-policy a:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}

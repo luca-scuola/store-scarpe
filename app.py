@@ -338,10 +338,24 @@ def remove_from_cart():
     return redirect(url_for('view_cart'))
 
 
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
 
 
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
 
 
+@app.route('/refund')
+def refund():
+    return render_template('refund.html')
+
+
+@app.route('/shipping')
+def shipping():
+    return render_template('shipping.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

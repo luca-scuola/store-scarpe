@@ -7,7 +7,6 @@ def initialize_database():
     try:
         conn = sqlite3.connect(DATABASE)
         cursor = conn.cursor()
-        # Assicurati che il file shoes.sql sia nella stessa directory e leggibile
         with open("shoes.sql", "r") as f:
             cursor.executescript(f.read())
         conn.commit()
