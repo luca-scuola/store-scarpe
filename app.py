@@ -87,9 +87,21 @@ def admin_index():
     if 'user' in session and session['role'] == 'admin':
         db = get_db_connection()
         shoes = db.execute('SELECT * FROM shoes').fetchall()
+        shoes_data = []
+        for shoe in shoes:
+            reviews = db.execute('SELECT r.review_text, u.username, r.id FROM reviews r JOIN users u ON r.user_id = u.id WHERE r.shoe_id = ?', (shoe['id'],)).fetchall()
+            shoes_data.append({
+                'id': shoe['id'],
+                'name': shoe['name'],
+                'description': shoe['description'],
+                'price': shoe['price'],
+                'image_url': shoe['image_url'],
+                'reviews': reviews
+            })
         db.close()
-        return render_template('admin_index.html', shoes=shoes)
+        return render_template('admin_index.html', shoes=shoes_data)
     return redirect(url_for('login'))
+
 
 @app.route('/add_shoe', methods=['POST'])
 def add_shoe():
@@ -275,11 +287,26 @@ def search():
     else:
         return redirect(url_for('user_index'))
     
-
-
-
-
-
+@app.route('/delete_review', methods=['POST'])
+def delete_review():
+    if 'user' in session and session['role'] == 'admin':
+        review_id = request.form.get('review_id')
+        print("Attempting to delete review with ID:", review_id)  # Debug print
+        try:
+            db = get_db_connection()
+            db.execute('DELETE FROM reviews WHERE id = ?', (review_id,))
+            db.commit()
+        except Exception as e:
+            print("Error deleting review:", e)  # Print out the error
+            db.rollback()
+            flash('Failed to delete review.')
+        finally:
+            db.close()
+            flash('Review deleted successfully.')
+        return redirect(url_for('admin_index'))
+    else:
+        flash('Unauthorized access.')
+    return redirect(url_for('login'))
 
 
 

@@ -16,6 +16,9 @@ def initialize_database():
     finally:
         conn.close()
 
+
+
+
 if __name__ == "__main__":
     print("Current directory:", os.getcwd())
     initialize_database()

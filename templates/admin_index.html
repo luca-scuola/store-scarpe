@@ -200,6 +200,42 @@
         .form-container button:hover {
             background-color: #fb7e21;
         }
+
+        .reviews {
+            background-color: #f7f7f7;
+            border-top: 2px solid #fb7e21;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        .review {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .review:last-child {
+            border-bottom: none;
+        }
+
+        .review-content {
+            width: 100%;
+            /* Ensure the content takes full width */
+            text-align: left;
+            /* Align text to the left */
+        }
+
+
+        .review-author {
+            width: 20%;
+            text-align: right;
+            font-size: 1em;
+            color: #666;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -242,35 +278,60 @@
 
         <h1 class="text-3xl font-bold mb-4 text-center">Manage Shoes</h1>
         <div class="my-4">
+
             {% for shoe in shoes %}
             <div class="card p-4 mb-6">
-                <img src="{{ url_for('static', filename='images/' + shoe.image_url) }}" alt="Shoe Image">
-                <p class="jersey-20-regular"><strong></strong> {{ shoe.name }}</p>
-                <div class="card-text">
-                    <p class="description-text"><strong>Description:</strong> {{ shoe.description }}</p>
-                    <p class="price-text"><strong>Price:</strong> {{ shoe.price }}</p>
+                <img src="{{ url_for('static', filename='images/' + shoe.image_url) }}" alt="{{ shoe.name }}"
+                    class="block mx-auto" style="max-width: 200px;">
+                <div class="text-center">
+                    <h3>{{ shoe.name }}</h3>
+                    <p class="description">{{ shoe.description }}</p>
+                    <p class="price"><strong>Price:</strong> {{ shoe.price }}</p>
                 </div>
-                <div class="button-container">
-                    <form action="{{ url_for('delete_shoe') }}" method="post" style="display:inline;">
+                <div class="reviews">
+                    <h4 class="text-xl font-bold mt-4">Reviews:</h4>
+                    {% if shoe.reviews %}
+                    <div class="review-container">
+                        {% for review in shoe.reviews %}
+                        <div class="review">
+                            <p class="review-content">{{ review.review_text }}</p>
+                            <div class="review-author">
+                                <small>Reviewed by {{ review.username }}</small>
+                                <form action="/delete_review" method="post" style="display:inline;">
+                                    <input type="hidden" name="review_id" value={{review.id}}>
+                                    <button type="submit"
+                                        class="button-review bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded">Delete
+                                        Review</button>
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p>No reviews yet.</p>
+                    {% endif %}
+                </div>
+
+                <div class="button-container mt-4">
+                    <form action="{{ url_for('edit_shoe', shoe_id=shoe.id) }}" method="get" style="display:inline;">
+                        <button type="submit"
+                            class="button-add bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded">Modify
+                            Shoe</button>
+                    </form>
+                    <form action="{{ url_for('delete_shoe', shoe_id=shoe.id) }}" method="post" style="display:inline;">
                         <input type="hidden" name="shoe_id" value="{{ shoe.id }}">
                         <button type="submit"
                             class="button-review bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded">Delete
                             Shoe</button>
                     </form>
-                    <form action="{{ url_for('edit_shoe', shoe_id=shoe.id) }}" method="get" style="display:inline;">
-                        <button type="submit"
-                            class="button-review bg-blue-500 hover:bg-blue-700 text-white py-1 px-3 rounded">Modify
-                            Shoe</button>
-                    </form>
                 </div>
             </div>
             {% endfor %}
-        </div>
-    </div>
 
-    <div class="text-center mt-6">
-        <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
-    </div>
+
+            <div class="text-center mt-6">
+                <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
+            </div>
 </body>
 
 </html>
