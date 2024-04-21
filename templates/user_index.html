@@ -183,45 +183,62 @@
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
+                align-items: center;
                 padding: 1rem;
             }
 
-            .icons-container,
-            .search-box {
+            .search-box,
+            .icons-container {
                 width: 100%;
-                margin-top: 1rem;
                 justify-content: center;
-            }
-
-            .search-box {
-                order: 1;
+                margin-top: 1rem;
             }
 
             .search-box input[type="text"],
             .search-box button {
-                width: 100%;
-                margin-top: 5px;
+                width: 90%;
+                /* adjust based on preference */
+                margin: 0.5rem 0;
+                /* space between input and button */
             }
 
             .icons-container {
-                order: 2;
-                padding: 0 1rem;
+                flex-direction: row;
+                justify-content: space-around;
+                gap: 10px;
             }
 
-            .flex.items-center {
-                flex-direction: column;
-                align-items: center;
+            .header img.logo {
+                width: 80px;
+                /* or any size as per requirement */
+                height: auto;
+                margin-bottom: 1rem;
+                /* space below logo */
+            }
+
+            .header a img.icon {
+                width: 35px;
+                /* adjust the icon size */
+                margin: 0 10px;
+                /* space between icons */
             }
         }
 
         @media (max-width: 480px) {
+            .header img.logo {
+                width: 60px;
+                /* smaller logo for very small devices */
+            }
 
-            .welcome-message,
-            .logout-link,
-            .card h3,
-            .description,
-            .price {
-                font-size: smaller;
+            .header a img.icon {
+                width: 30px;
+                /* smaller icons for very small devices */
+            }
+
+            .search-box input[type="text"],
+            .search-box button {
+                font-size: 14px;
+                /* smaller text for input and button */
             }
         }
     </style>
