@@ -140,6 +140,40 @@
         margin-left: auto;
         margin-right: auto;
     }
+
+
+
+    @media (max-width: 768px) {
+
+        .feature-item {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .container {
+            padding: 0 20px;
+        }
+
+        .grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 28px;
+        }
+
+        .text-2xl {
+            font-size: 20px;
+        }
+
+
+        .footer-links a {
+            display: block;
+            margin-bottom: 10px;
+        }
+    }
 </style>
 
 <div class="container mx-auto mt-20 overflow-hidden">

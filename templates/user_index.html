@@ -178,6 +178,52 @@
         .review-rating {
             width: 100px;
         }
+
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .icons-container,
+            .search-box {
+                width: 100%;
+                margin-top: 1rem;
+                justify-content: center;
+            }
+
+            .search-box {
+                order: 1;
+            }
+
+            .search-box input[type="text"],
+            .search-box button {
+                width: 100%;
+                margin-top: 5px;
+            }
+
+            .icons-container {
+                order: 2;
+                padding: 0 1rem;
+            }
+
+            .flex.items-center {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .welcome-message,
+            .logout-link,
+            .card h3,
+            .description,
+            .price {
+                font-size: smaller;
+            }
+        }
     </style>
 </head>
 
