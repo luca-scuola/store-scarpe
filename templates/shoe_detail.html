@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ shoe.name }} Details</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jersey+20&family=Titillium+Web&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f7fafc;
+      }
+
+      .header {
+        background-color: #fb7e21;
+        color: #fff;
+        padding: 10px 20px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .item-container {
+        background-color: #fff;
+        border: 2px solid #fb7e21;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px auto;
+        max-width: 1000px;
+        text-align: left;
+      }
+
+      h3 {
+        font-family: "Jersey 20", sans-serif;
+        text-align: center;
+        font-size: 36px;
+      }
+
+      .text-description,
+      .text-price {
+        font-family: "Titillium Web", sans-serif;
+        margin-top: 10px;
+        text-align: left;
+      }
+
+      .reviews {
+        background-color: #f7f7f7;
+        border-top: 2px solid #fb7e21;
+        padding: 10px;
+        margin-top: 20px;
+        text-align: left;
+      }
+
+      .review {
+        font-family: "Titillium Web", sans-serif;
+        border-bottom: 1px solid #ddd;
+        padding: 8px;
+        margin-bottom: 10px;
+        text-align: justify;
+      }
+
+      .review:last-child {
+        border-bottom: none;
+      }
+
+      .review-author {
+        text-align: right;
+        font-size: 0.9em;
+        color: #666;
+      }
+
+      img {
+        display: block;
+        max-width: 30%;
+        height: auto;
+        margin: 20px auto;
+      }
+
+      .cart-message {
+        text-align: center;
+        font-size: 24px;
+        margin-top: 20px;
+        font-weight: bold;
+      }
+
+      button {
+        display: block;
+        margin: 20px auto;
+        background-color: #fb7e21;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 18px;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: black;
+      }
+
+      .review p {
+        text-align: center;
+        margin: auto;
+      }
+
+      .review-author {
+        display: block;
+        margin: auto;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="item-container">
+      <h3>{{ shoe.name }}</h3>
+      <img
+        src="{{ url_for('static', filename='images/' + shoe.image_url) }}"
+        alt="{{ shoe.name }}"
+        class="shoe-image"
+      />
+      <p class="text-description">{{ shoe.description }}</p>
+      <p class="text-price">Price: {{ shoe.price }}</p>
+      <!-- If you have reviews or other content for the shoe, include it here -->
+    </div>
+
+    <div class="text-center mt-6">
+      <a href="{{ url_for('home') }}" class="cart-message">Back to Home</a>
+    </div>
+  </body>
+</html>
