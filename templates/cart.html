@@ -110,6 +110,18 @@
         button:hover {
             background-color: black;
         }
+
+        .review p {
+            text-align: center;
+            margin: auto;
+        }
+
+        .review-author {
+            display: block; 
+            margin: auto; 
+            text-align: center;
+        }
+
     </style>
 </head>
 
@@ -136,16 +148,16 @@
             <p class="text-price"><strong>Price:</strong>{{ item.price }}</p>
             <div class="reviews">
                 {% if item.reviews %}
-                {% for review in item.reviews %}
-                <div class="review">
-                    <p>{{ review.text }}</p>
-                    <p class="review-author">Reviewed by {{ review.username }}</p>
-                </div>
-                {% endfor %}
+                    {% for review in item.reviews %}
+                    <div class="review">
+                        <p>{{ review.text }}</p>
+                        <p class="review-author">Reviewed by {{ review.username }}</p>
+                    </div>
+                    {% endfor %}
                 {% else %}
-                <p class="review-author">No reviews yet.</p>
+                    <p class="review-author">No reviews yet.</p>
                 {% endif %}
-            </div>
+            </div>                       
             <form action="{{ url_for('remove_from_cart', shoe_id=item.id ) }}" method="post">
                 <input type="hidden" name="shoe_id" value="{{ item.id }}">
                 <button type="submit">Remove from Cart</button>
