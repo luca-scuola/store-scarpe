@@ -1,405 +1,517 @@
-{% extends 'base.html' %}
-
-{% block title %}Home{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% block title %}Home{% endblock %} {% block content
+%}
 <style>
-    .slide {
-        width: 300px;
-        margin-right: 20px;
-        display: inline-flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 400px;
-        background-color: #fff;
-        color: #333;
-        transition: transform 0.3s ease-in-out;
-        border: 1px solid #fb7e21;
-        border-radius: 8px;
-    }
+  .slide {
+    width: 300px;
+    margin-right: 20px;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 400px;
+    background-color: #fff;
+    color: #333;
+    transition: transform 0.3s ease-in-out;
+    border: 1px solid #fb7e21;
+    border-radius: 8px;
+  }
 
-    #slides-container {
-        margin-right: -20px;
-    }
+  #slides-container {
+    margin-right: -20px;
+  }
 
-    .slide:last-child {
-        margin-right: 0;
-    }
+  .slide:last-child {
+    margin-right: 0;
+  }
 
-    .slide h2 {
-        margin-bottom: 0.5rem;
-        color: #333;
-    }
+  .slide h2 {
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
 
-    .slide img {
-        max-height: 280px;
-        object-fit: cover;
-        object-position: bottom;
-    }
+  .slide img {
+    max-height: 280px;
+    object-fit: cover;
+    object-position: bottom;
+  }
 
-    .hide-scroll-bar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
+  .hide-scroll-bar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 
-    .hide-scroll-bar::-webkit-scrollbar {
-        display: none;
-    }
+  .hide-scroll-bar::-webkit-scrollbar {
+    display: none;
+  }
 
+  .overflow-hidden {
+    /* Spazio aggiunto tra le slide e le features */
+    margin-bottom: 50px;
+  }
 
-    .overflow-hidden {
-        /* Spazio aggiunto tra le slide e le features */
-        margin-bottom: 50px;
-    }
+  .feature-section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
 
-    .feature-section {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-    }
+  .feature-section {
+    margin-bottom: 200px;
+  }
 
-    .feature-section {
-        margin-bottom: 200px;
-    }
+  .feature-item {
+    padding: 20px;
+    background-color: #fff;
+    border: 2px solid #eee;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    transition: transform 0.3s ease-in-out;
+  }
 
+  .feature-item:hover {
+    transform: translateY(-5px);
+    border-color: #fb7e21;
+  }
+
+  .feature-item img {
+    margin-bottom: 16px;
+  }
+
+  .feature-item h3 {
+    font-size: 1.25rem;
+    color: #333;
+    margin-bottom: 8px;
+  }
+
+  .feature-item p {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.5;
+  }
+
+  .text-brand-color {
+    color: #fb7e21;
+  }
+
+  .hover\:underline:hover {
+    text-decoration: underline;
+  }
+
+  .footer-links li {
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-links li:last-child {
+    margin-bottom: 0;
+  }
+
+  .footer-links a {
+    color: #999;
+    transition: color 0.3s ease-in-out;
+  }
+
+  .footer-links a:hover {
+    color: #fff;
+  }
+
+  .bg-brand-color {
+    background-color: #fb7e21;
+  }
+
+  .bg-brand-color-light {
+    background-color: #fc8d34;
+  }
+
+  .border-gray-700 {
+    border-color: #333333;
+  }
+
+  #subscription-message {
+    display: none;
+    background-color: #90ee90;
+    color: black;
+    text-align: center;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @media (max-width: 768px) {
     .feature-item {
-        padding: 20px;
-        background-color: #fff;
-        border: 2px solid #eee;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        transition: transform 0.3s ease-in-out;
+      width: 100%;
+      margin: 0 auto;
     }
 
-    .feature-item:hover {
-        transform: translateY(-5px);
-        border-color: #fb7e21;
+    .container {
+      padding: 0 20px;
     }
 
-    .feature-item img {
-        margin-bottom: 16px;
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 28px;
     }
 
-    .feature-item h3 {
-        font-size: 1.25rem;
-        color: #333;
-        margin-bottom: 8px;
-    }
-
-    .feature-item p {
-        font-size: 1rem;
-        color: #666;
-        line-height: 1.5;
-    }
-
-    .text-brand-color {
-        color: #fb7e21;
-    }
-
-    .hover\:underline:hover {
-        text-decoration: underline;
-    }
-
-    .footer-links li {
-        margin-bottom: 0.5rem;
-    }
-
-    .footer-links li:last-child {
-        margin-bottom: 0;
+    .text-2xl {
+      font-size: 20px;
     }
 
     .footer-links a {
-        color: #999;
-        transition: color 0.3s ease-in-out;
+      display: block;
+      margin-bottom: 10px;
     }
-
-    .footer-links a:hover {
-        color: #fff;
-    }
-
-    .bg-brand-color {
-        background-color: #fb7e21;
-    }
-
-    .bg-brand-color-light {
-        background-color: #fc8d34;
-    }
-
-    .border-gray-700 {
-        border-color: #333333;
-    }
-
-    #subscription-message {
-        display: none;
-        background-color: #90ee90;
-        color: black;
-        text-align: center;
-        padding: 0.5rem 1rem;
-        border-radius: 0.5rem;
-        margin-top: 1rem;
-        width: fit-content;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-
-
-    @media (max-width: 768px) {
-
-        .feature-item {
-            width: 100%;
-            margin: 0 auto;
-        }
-
-        .container {
-            padding: 0 20px;
-        }
-
-        .grid {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    @media (max-width: 480px) {
-        h1 {
-            font-size: 28px;
-        }
-
-        .text-2xl {
-            font-size: 20px;
-        }
-
-
-        .footer-links a {
-            display: block;
-            margin-bottom: 10px;
-        }
-    }
+  }
 </style>
 
 <div class="container mx-auto mt-20 overflow-hidden">
-    <h1 class="text-4xl font-bold mb-20 text-center text-black-800">Welcome to Our Shoe Store</h1>
-    <div class="flex overflow-x-scroll hide-scroll-bar pb-10">
-        <div id="slides-container" class="flex flex-nowrap">
-            {% for shoe in shoes %}
-            <div class="inline-block px-3">
-                <div class="slide rounded-lg p-6">
-                    <h2 class="text-2xl font-semibold">{{ shoe.name }}</h2>
-                    <img src="{{ url_for('static', filename='images/' + shoe.image_url) }}" alt="{{ shoe.name }}"
-                        class="rounded-lg">
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+  <h1 class="text-4xl font-bold mb-20 text-center text-black-800">
+    Welcome to Our Shoe Store
+  </h1>
+  <div class="flex overflow-x-scroll hide-scroll-bar pb-10">
+    <div id="slides-container" class="flex flex-nowrap">
+      {% for shoe in shoes %}
+      <div class="inline-block px-3">
+        <a href="{{ url_for('shoe_detail', shoe_id=shoe.id) }}">
+          <div class="slide rounded-lg p-6">
+            <h2 class="text-2xl font-semibold">{{ shoe.name }}</h2>
+            <img
+              src="{{ url_for('static', filename='images/' + shoe.image_url) }}"
+              alt="{{ shoe.name }}"
+              class="rounded-lg"
+            />
+          </div>
+        </a>
+      </div>
+      {% endfor %}
     </div>
+  </div>
 </div>
 
 <div class="feature-section">
-    <div class="container mx-auto px-6">
-        <div class="grid grid-cols-3 gap-8">
-            <div class="feature-item flex flex-col items-center justify-center p-4">
-                <img src="{{ url_for('static', filename='icon/search.png') }}" alt="Verification Icon" class="mx-auto">
-                <h3 class="font-semibold mt-4">Verification</h3>
-                <p>Every item sold undergoes our thorough multi-step verification process by a team of verification
-                    experts.</p>
-            </div>
+  <div class="container mx-auto px-6">
+    <div class="grid grid-cols-3 gap-8">
+      <div class="feature-item flex flex-col items-center justify-center p-4">
+        <img
+          src="{{ url_for('static', filename='icon/search.png') }}"
+          alt="Verification Icon"
+          class="mx-auto"
+        />
+        <h3 class="font-semibold mt-4">Verification</h3>
+        <p>
+          Every item sold undergoes our thorough multi-step verification process
+          by a team of verification experts.
+        </p>
+      </div>
 
-            <div class="feature-item flex flex-col items-center justify-center p-4">
-                <img src="{{ url_for('static', filename='icon/dollar-tag.png') }}" alt="Transparent Pricing Icon"
-                    class="mx-auto">
-                <h3 class="font-semibold mt-4">Transparent Pricing</h3>
-                <p>Our real-time marketplace operates like a stock market, allowing you to buy and sell highly
-                    sought-after items at true market prices.</p>
-            </div>
+      <div class="feature-item flex flex-col items-center justify-center p-4">
+        <img
+          src="{{ url_for('static', filename='icon/dollar-tag.png') }}"
+          alt="Transparent Pricing Icon"
+          class="mx-auto"
+        />
+        <h3 class="font-semibold mt-4">Transparent Pricing</h3>
+        <p>
+          Our real-time marketplace operates like a stock market, allowing you
+          to buy and sell highly sought-after items at true market prices.
+        </p>
+      </div>
 
-            <div class="feature-item flex flex-col items-center justify-center p-4">
-                <img src="{{ url_for('static', filename='icon/access-control.png') }}" alt="Global Access Icon"
-                    class="mx-auto">
-                <h3 class="font-semibold mt-4">Global Access</h3>
-                <p>No matter if it's a pre-release, sold out, or an exclusive release, our network of clients in over
-                    200 countries ensures you'll find the item you are looking for.</p>
-            </div>
+      <div class="feature-item flex flex-col items-center justify-center p-4">
+        <img
+          src="{{ url_for('static', filename='icon/access-control.png') }}"
+          alt="Global Access Icon"
+          class="mx-auto"
+        />
+        <h3 class="font-semibold mt-4">Global Access</h3>
+        <p>
+          No matter if it's a pre-release, sold out, or an exclusive release,
+          our network of clients in over 200 countries ensures you'll find the
+          item you are looking for.
+        </p>
+      </div>
 
-            <div class="feature-item flex flex-col items-center justify-center p-4">
-                <img src="{{ url_for('static', filename='icon/paper-bag.png') }}" alt="No Worries Icon" class="mx-auto">
-                <h3 class="font-semibold mt-4">No Worries Shopping</h3>
-                <p>Experience hassle-free shopping with no cancellations, no bids, and no need to compete with buyers or
-                    deal with sellers. We handle all steps to ensure a simple and secure purchasing process.</p>
-            </div>
+      <div class="feature-item flex flex-col items-center justify-center p-4">
+        <img
+          src="{{ url_for('static', filename='icon/paper-bag.png') }}"
+          alt="No Worries Icon"
+          class="mx-auto"
+        />
+        <h3 class="font-semibold mt-4">No Worries Shopping</h3>
+        <p>
+          Experience hassle-free shopping with no cancellations, no bids, and no
+          need to compete with buyers or deal with sellers. We handle all steps
+          to ensure a simple and secure purchasing process.
+        </p>
+      </div>
 
-            <div class="feature-item flex flex-col items-center justify-center p-4">
-                <img src="{{ url_for('static', filename='icon/security.png') }}" alt="Security Icon" class="mx-auto">
-                <h3 class="font-semibold mt-4">Secured Transactions</h3>
-                <p>Protecting the integrity of our marketplace is a step ahead with our security systems and fraud
-                    prevention measures, partnering with the best in the world to keep your information safe 24/7.</p>
-            </div>
+      <div class="feature-item flex flex-col items-center justify-center p-4">
+        <img
+          src="{{ url_for('static', filename='icon/security.png') }}"
+          alt="Security Icon"
+          class="mx-auto"
+        />
+        <h3 class="font-semibold mt-4">Secured Transactions</h3>
+        <p>
+          Protecting the integrity of our marketplace is a step ahead with our
+          security systems and fraud prevention measures, partnering with the
+          best in the world to keep your information safe 24/7.
+        </p>
+      </div>
 
-            <div class="feature-item flex flex-col items-center justify-center p-4">
-                <img src="{{ url_for('static', filename='icon/mobile.png') }}" alt="Customer Support Icon"
-                    class="mx-auto">
-                <h3 class="font-semibold mt-4">Here For You</h3>
-                <p>Thanks to our dedicated Help Center and staff, we ensure we're always available to answer all your
-                    questions about our marketplace.</p>
-            </div>
-        </div>
+      <div class="feature-item flex flex-col items-center justify-center p-4">
+        <img
+          src="{{ url_for('static', filename='icon/mobile.png') }}"
+          alt="Customer Support Icon"
+          class="mx-auto"
+        />
+        <h3 class="font-semibold mt-4">Here For You</h3>
+        <p>
+          Thanks to our dedicated Help Center and staff, we ensure we're always
+          available to answer all your questions about our marketplace.
+        </p>
+      </div>
     </div>
+  </div>
 </div>
 
-
 <script>
-    // Aggiungo un listener per l'evento DOMContentLoaded.
-    window.addEventListener('DOMContentLoaded', (event) => {
-        // Ottengo il riferimento al contenitore degli slider dal documento HTML utilizzando l'ID 'slides-container'.
-        const slidesContainer = document.getElementById('slides-container');
-        // Variabile per tenere traccia dell'indice corrente dello slider.
-        let currentIndex = 0;
-        // Variabile per tenere traccia dell'intervallo di tempo tra il cambio di slide.
-        let interval = null;
+  // Aggiungo un listener per l'evento DOMContentLoaded.
+  window.addEventListener("DOMContentLoaded", (event) => {
+    // Ottengo il riferimento al contenitore degli slider dal documento HTML utilizzando l'ID 'slides-container'.
+    const slidesContainer = document.getElementById("slides-container");
+    // Variabile per tenere traccia dell'indice corrente dello slider.
+    let currentIndex = 0;
+    // Variabile per tenere traccia dell'intervallo di tempo tra il cambio di slide.
+    let interval = null;
 
-        // Per ogni elemento con classe 'slide' nel documento HTML, clono l'elemento e lo aggiunge al contenitore degli slider.
-        document.querySelectorAll('.slide').forEach((slide, index) => {
-            const cloneSlide = slide.cloneNode(true);
-            // Imposto il margine destro della slide clonata a 0 se è l'ultima slide.
-            if (index === document.querySelectorAll('.slide').length - 1) {
-                cloneSlide.style.marginRight = '0px';
-            }
-            slidesContainer.appendChild(cloneSlide);
-        });
-
-        // Definiso le dimensioni di ciascuna slide e il margine tra di esse.
-        const slideWidth = 300;
-        const slideMargin = 20;
-
-        // Funzione per ciclare tra le slide.
-        function cycleSlides() {
-            currentIndex++;
-            // Se si arriva alla fine delle slide, reimposto l'indice corrente a 0 e riposiziono il contenitore delle slide.
-            if (currentIndex > document.querySelectorAll('.slide').length / 2 - 1) {
-                currentIndex = 0;
-                slidesContainer.style.transition = 'none';
-                slidesContainer.style.transform = `translateX(${currentIndex * (slideWidth + slideMargin)}px)`;
-                slidesContainer.offsetWidth;
-                setTimeout(() => {
-                    slidesContainer.style.transition = 'transform 0.3s ease-out';
-                    currentIndex++;
-                    slidesContainer.style.transform = `translateX(-${currentIndex * (slideWidth + slideMargin)}px)`;
-                }, 10);
-            } else {
-                // Altrimenti, sposto il contenitore delle slide all'indice corrente.
-                slidesContainer.style.transition = 'transform 0.3s ease-out';
-                slidesContainer.style.transform = `translateX(-${currentIndex * (slideWidth + slideMargin)}px)`;
-            }
-        }
-
-        // Avvio l'intervallo per ciclare tra le slide ogni 2 secondi.
-        interval = setInterval(cycleSlides, 2000);
-
-        // Aggiungo un listener per l'evento 'beforeunload', che si verifica quando la finestra sta per essere scaricata.
-        window.addEventListener('beforeunload', () => {
-            // Se l'intervallo è stato avviato, lo cancello per evitare che continui ad eseguire cicli dopo che la pagina è stata scaricata.
-            if (interval) {
-                clearInterval(interval);
-            }
-        });
-
-        // Aggiungo un listener per l'evento di invio del modulo per la sottoscrizione.
-        document.getElementById('subscribe-form').addEventListener('submit', function (event) {
-            // Impedisco il comportamento predefinito di invio del modulo.
-            event.preventDefault();
-            // Ottengo il riferimento al messaggio di sottoscrizione.
-            var messageBox = document.getElementById('subscription-message');
-            // Mostro il messaggio di sottoscrizione.
-            messageBox.style.display = 'block';
-            // Nascondo il modulo di sottoscrizione.
-            document.getElementById('subscribe-form').style.display = 'none';
-        });
+    // Per ogni elemento con classe 'slide' nel documento HTML, clono l'elemento e lo aggiunge al contenitore degli slider.
+    document.querySelectorAll(".slide").forEach((slide, index) => {
+      const cloneSlide = slide.cloneNode(true);
+      // Imposto il margine destro della slide clonata a 0 se è l'ultima slide.
+      if (index === document.querySelectorAll(".slide").length - 1) {
+        cloneSlide.style.marginRight = "0px";
+      }
+      slidesContainer.appendChild(cloneSlide);
     });
 
+    // Definiso le dimensioni di ciascuna slide e il margine tra di esse.
+    const slideWidth = 300;
+    const slideMargin = 20;
+
+    // Funzione per ciclare tra le slide.
+    function cycleSlides() {
+      currentIndex++;
+      // Se si arriva alla fine delle slide, reimposto l'indice corrente a 0 e riposiziono il contenitore delle slide.
+      if (currentIndex > document.querySelectorAll(".slide").length / 2 - 1) {
+        currentIndex = 0;
+        slidesContainer.style.transition = "none";
+        slidesContainer.style.transform = `translateX(${
+          currentIndex * (slideWidth + slideMargin)
+        }px)`;
+        slidesContainer.offsetWidth;
+        setTimeout(() => {
+          slidesContainer.style.transition = "transform 0.3s ease-out";
+          currentIndex++;
+          slidesContainer.style.transform = `translateX(-${
+            currentIndex * (slideWidth + slideMargin)
+          }px)`;
+        }, 10);
+      } else {
+        // Altrimenti, sposto il contenitore delle slide all'indice corrente.
+        slidesContainer.style.transition = "transform 0.3s ease-out";
+        slidesContainer.style.transform = `translateX(-${
+          currentIndex * (slideWidth + slideMargin)
+        }px)`;
+      }
+    }
+
+    // Avvio l'intervallo per ciclare tra le slide ogni 2 secondi.
+    interval = setInterval(cycleSlides, 2000);
+
+    // Aggiungo un listener per l'evento 'beforeunload', che si verifica quando la finestra sta per essere scaricata.
+    window.addEventListener("beforeunload", () => {
+      // Se l'intervallo è stato avviato, lo cancello per evitare che continui ad eseguire cicli dopo che la pagina è stata scaricata.
+      if (interval) {
+        clearInterval(interval);
+      }
+    });
+
+    // Aggiungo un listener per l'evento di invio del modulo per la sottoscrizione.
+    document
+      .getElementById("subscribe-form")
+      .addEventListener("submit", function (event) {
+        // Impedisco il comportamento predefinito di invio del modulo.
+        event.preventDefault();
+        // Ottengo il riferimento al messaggio di sottoscrizione.
+        var messageBox = document.getElementById("subscription-message");
+        // Mostro il messaggio di sottoscrizione.
+        messageBox.style.display = "block";
+        // Nascondo il modulo di sottoscrizione.
+        document.getElementById("subscribe-form").style.display = "none";
+      });
+  });
 </script>
 
-{% endblock %}
-
-{% block footer %}
+{% endblock %} {% block footer %}
 <footer class="bg-black text-white py-8">
-    <div class="container mx-auto px-4">
-        <div class="flex flex-wrap -mx-4">
-            <div class="w-full lg:w-1/3 px-4 mb-8 lg:mb-0">
-                <h2 class="text-xl font-semibold mb-6">Top Collections</h2>
-                <ul class="list-none footer-links">
-                    <li>Air Jordan 4</li>
-                    <li>Air Jordan 1</li>
-                    <li>Nike Dunk</li>
-                    <li>Yeezy</li>
-                    <li>Yeezy 350</li>
-                    <li>Yeezy Slides</li>
-                    <li>Yeezy 700</li>
-                    <li>Air Force 1</li>
-                    <li>Travis Scott</li>
-                    <li>Off-White</li>
-                </ul>
-                <a href="#" class="text-gray-400 hover:text-gray-200 text-sm">View More</a>
+  <div class="container mx-auto px-4">
+    <div class="flex flex-wrap -mx-4">
+      <div class="w-full lg:w-1/3 px-4 mb-8 lg:mb-0">
+        <h2 class="text-xl font-semibold mb-6">Top Collections</h2>
+        <ul class="list-none footer-links">
+          <li>Air Jordan 4</li>
+          <li>Air Jordan 1</li>
+          <li>Nike Dunk</li>
+          <li>Yeezy</li>
+          <li>Yeezy 350</li>
+          <li>Yeezy Slides</li>
+          <li>Yeezy 700</li>
+          <li>Air Force 1</li>
+          <li>Travis Scott</li>
+          <li>Off-White</li>
+        </ul>
+        <a href="#" class="text-gray-400 hover:text-gray-200 text-sm"
+          >View More</a
+        >
+      </div>
+      <div class="w-full lg:w-1/3 px-4">
+        <div class="flex justify-evenly lg:block">
+          <div class="mb-8">
+            <h2 class="text-xl font-semibold mb-6">Follow us</h2>
+            <div class="flex items-center">
+              <a
+                href="#"
+                class="text-gray-400 hover:text-gray-200 text-2xl mr-4"
+                ><i class="fab fa-facebook-square"></i
+              ></a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-gray-200 text-2xl mr-4"
+                ><i class="fab fa-twitter"></i
+              ></a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-gray-200 text-2xl mr-4"
+                ><i class="fab fa-instagram"></i
+              ></a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-gray-200 text-2xl mr-4"
+                ><i class="fab fa-youtube"></i
+              ></a>
+              <a href="#" class="text-gray-400 hover:text-gray-200 text-2xl"
+                ><i class="fab fa-linkedin"></i
+              ></a>
             </div>
-            <div class="w-full lg:w-1/3 px-4">
-                <div class="flex justify-evenly lg:block">
-                    <div class="mb-8">
-                        <h2 class="text-xl font-semibold mb-6">Follow us</h2>
-                        <div class="flex items-center">
-                            <a href="#" class="text-gray-400 hover:text-gray-200 text-2xl mr-4"><i
-                                    class="fab fa-facebook-square"></i></a>
-                            <a href="#" class="text-gray-400 hover:text-gray-200 text-2xl mr-4"><i
-                                    class="fab fa-twitter"></i></a>
-                            <a href="#" class="text-gray-400 hover:text-gray-200 text-2xl mr-4"><i
-                                    class="fab fa-instagram"></i></a>
-                            <a href="#" class="text-gray-400 hover:text-gray-200 text-2xl mr-4"><i
-                                    class="fab fa-youtube"></i></a>
-                            <a href="#" class="text-gray-400 hover:text-gray-200 text-2xl"><i
-                                    class="fab fa-linkedin"></i></a>
-                        </div>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-semibold mb-6">Customer Service</h2>
-                        <ul class="list-none footer-links">
-                            <li><a href="{{ url_for('login') }}" class="text-gray-400 hover:text-gray-200">My
-                                    account</a></li>
-                            <li><a href="{{ url_for('register') }}" class="text-gray-400 hover:text-gray-200"> Create an
-                                    account</a></li>
-                            <li><a href="{{ url_for('contact') }}" class="text-gray-400 hover:text-gray-200">Contact
-                                    Us</a></li>
-                            <li><a href="{{ url_for('privacy') }}" class="text-gray-400 hover:text-gray-200">Privacy
-                                    policy</a></li>
-                            <li><a href="{{ url_for('refund') }}" class="text-gray-400 hover:text-gray-200">Refund
-                                    Policy</a></li>
-                            <li><a href="{{ url_for('shipping') }}" class="text-gray-400 hover:text-gray-200">Shipping
-                                    Policy</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="w-full lg:w-1/3 px-4">
-                <h2 class="text-xl font-semibold mb-6">Newsletter</h2>
-                <form id="subscribe-form" action="javascript:void(0);" method="post">
-                    <div class="mb-4">
-                        <input type="email" placeholder="Enter your email" class="px-4 py-2 w-full text-black" required>
-                    </div>
-                    <div class="mb-6">
-                        <label class="inline-block cursor-pointer">
-                            <input type="radio" name="gender" value="male" class="mr-2">Male
-                        </label>
-                        <label class="inline-block cursor-pointer ml-6">
-                            <input type="radio" name="gender" value="female" class="mr-2">Female
-                        </label>
-                    </div>
-                    <button type="submit"
-                        class="px-6 py-2 bg-brand-color text-white font-semibold rounded-md hover:bg-brand-color-light">Subscribe</button>
-                </form>
-                <div id="subscription-message"
-                    style="display: none; background-color: #90ee90; color: black; text-align: center; padding: 0.5rem 1rem; border-radius: 0.5rem; margin-top: 1rem; width: fit-content; margin-left: auto; margin-right: auto;">
-                    Thanks for subscribing!
-                </div>
-            </div>
+          </div>
+          <div>
+            <h2 class="text-xl font-semibold mb-6">Customer Service</h2>
+            <ul class="list-none footer-links">
+              <li>
+                <a
+                  href="{{ url_for('login') }}"
+                  class="text-gray-400 hover:text-gray-200"
+                  >My account</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('register') }}"
+                  class="text-gray-400 hover:text-gray-200"
+                >
+                  Create an account</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('contact') }}"
+                  class="text-gray-400 hover:text-gray-200"
+                  >Contact Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('privacy') }}"
+                  class="text-gray-400 hover:text-gray-200"
+                  >Privacy policy</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('refund') }}"
+                  class="text-gray-400 hover:text-gray-200"
+                  >Refund Policy</a
+                >
+              </li>
+              <li>
+                <a
+                  href="{{ url_for('shipping') }}"
+                  class="text-gray-400 hover:text-gray-200"
+                  >Shipping Policy</a
+                >
+              </li>
+            </ul>
+          </div>
         </div>
-        <div class="pt-8 mt-8 border-t border-gray-700 text-center text-sm">
-            &copy; 2024, Limited. Company No. 08761997 VAT No. GB170801090
+      </div>
+      <div class="w-full lg:w-1/3 px-4">
+        <h2 class="text-xl font-semibold mb-6">Newsletter</h2>
+        <form id="subscribe-form" action="javascript:void(0);" method="post">
+          <div class="mb-4">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              class="px-4 py-2 w-full text-black"
+              required
+            />
+          </div>
+          <div class="mb-6">
+            <label class="inline-block cursor-pointer">
+              <input type="radio" name="gender" value="male" class="mr-2" />Male
+            </label>
+            <label class="inline-block cursor-pointer ml-6">
+              <input
+                type="radio"
+                name="gender"
+                value="female"
+                class="mr-2"
+              />Female
+            </label>
+          </div>
+          <button
+            type="submit"
+            class="px-6 py-2 bg-brand-color text-white font-semibold rounded-md hover:bg-brand-color-light"
+          >
+            Subscribe
+          </button>
+        </form>
+        <div
+          id="subscription-message"
+          style="
+            display: none;
+            background-color: #90ee90;
+            color: black;
+            text-align: center;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+          "
+        >
+          Thanks for subscribing!
         </div>
+      </div>
     </div>
+    <div class="pt-8 mt-8 border-t border-gray-700 text-center text-sm">
+      &copy; 2024, Limited. Company No. 08761997 VAT No. GB170801090
+    </div>
+  </div>
 </footer>
 {% endblock %}
