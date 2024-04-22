@@ -277,47 +277,41 @@ def view_cart():
     if 'user' not in session:
         return redirect(url_for('login'))
 
-    # Ottengo l'ID dell'utente dalla sessione
+    # Recupero l'ID dell'utente dalla sessione
     user_id = session['user_id']
     db = get_db_connection()
-    # Ottengo tutte le righe del carrello per l'utente corrente, inclusi i dettagli delle scarpe e le recensioni associate
+    
+    # Eseguo una query per selezionare tutti i dettagli delle scarpe nel carrello per l'utente corrente
     cart_items = db.execute('''
-        SELECT s.*, c.id AS cart_id, r.review_text, r.user_id AS reviewer_id, u.username AS reviewer_name
+        SELECT s.*, c.id AS cart_id
         FROM cart c
         JOIN shoes s ON c.shoe_id = s.id
-        LEFT JOIN reviews r ON s.id = r.shoe_id
-        JOIN users u ON r.user_id = u.id
         WHERE c.user_id = ?
     ''', (user_id,)).fetchall()
+
+    # Creo un dizionario di articoli del carrello con l'ID della scarpa come chiave e i dettagli come valori
+    organized_items = {item['id']: dict(item) for item in cart_items}
+
+    # Ciclo sugli ID degli articoli del carrello per ottenere le recensioni corrispondenti per ciascuna scarpa
+    for item_id in organized_items.keys():
+        reviews = db.execute('''
+            SELECT r.review_text, u.username
+            FROM reviews r
+            JOIN users u ON r.user_id = u.id
+            WHERE r.shoe_id = ?
+        ''', (item_id,)).fetchall()
+
+        # Aggiungo le recensioni al dizionario degli articoli organizzati sotto la chiave reviews
+        organized_items[item_id]['reviews'] = [{
+            'text': review['review_text'],    
+            'username': review['username']  
+        } for review in reviews]
+
     db.close()
 
-    # Creo un dizionario per organizzare le scarpe del carrello
-    organized_items = {}
-    for item in cart_items:
-         # Controllo se l'ID della scarpa è già presente nel dizionario organized_items
-        if item['id'] in organized_items:
-            # Se l'ID è già presente, aggiungo la recensione associata alla scarpa
-            organized_items[item['id']]['reviews'].append({
-                'text': item['review_text'],
-                'username': item['reviewer_name']
-            })
-        # Se l'ID non è presente, creo una nuova voce nel dizionario per questa scarpa
-        else:
-            organized_items[item['id']] = {
-                'name': item['name'],
-                'description': item['description'],
-                'price': item['price'],
-                'image_url': item['image_url'],
-                'id': item['id'],
-                # Se c'è una recensione associata la aggiungo, altrimenti creo una lista vuota per le recensioni
-                'reviews': [{
-                    'text': item['review_text'],
-                    'username': item['reviewer_name']
-                }] if item['review_text'] else []
-            }
-    
-    # Passo i dati organizzati del carrello 
+    # Passa i dati organizzati al template HTML e renderizza la pagina del carrello
     return render_template('cart.html', cart_items=list(organized_items.values()))
+
 
 
 # Route per la ricerca di scarpe
@@ -398,6 +392,18 @@ def remove_from_cart():
         db.close()
 
     return redirect(url_for('view_cart'))
+
+
+# Route per vedere i dettagli del le scarpe in home.html
+@app.route('/shoe_detail/<int:shoe_id>')
+def shoe_detail(shoe_id):
+    db = get_db_connection()
+    shoe = db.execute('SELECT * FROM shoes WHERE id = ?', (shoe_id,)).fetchone()
+    db.close()
+    if shoe:
+        return render_template('shoe_detail.html', shoe=shoe)
+    else:
+        return 'Shoe not found', 404
 
 
 @app.route('/contact')
